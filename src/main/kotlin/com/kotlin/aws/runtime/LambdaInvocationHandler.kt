@@ -1,7 +1,7 @@
 package com.kotlin.aws.runtime
 
-import com.kotlin.aws.runtime.LambdaRouters.HANDLER_CLASS
-import com.kotlin.aws.runtime.LambdaRouters.LAMBDA_TASK_ROOT
+import com.kotlin.aws.runtime.LambdaEnvironment.HANDLER_CLASS
+import com.kotlin.aws.runtime.LambdaEnvironment.LAMBDA_TASK_ROOT
 import java.io.File
 import java.lang.reflect.Method
 import java.net.MalformedURLException

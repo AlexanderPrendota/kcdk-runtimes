@@ -3,7 +3,7 @@ package com.kotlin.aws.runtime
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.kotlin.aws.runtime.LambdaRouters.REQUEST_HEADER_NAME
+import com.kotlin.aws.runtime.LambdaEnvironment.REQUEST_HEADER_NAME
 
 val mapper: ObjectMapper = jacksonObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
 
