@@ -1,8 +1,11 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 group = "org.example"
-version = "1.0-SNAPSHOT"
+version = "0.0.1"
 
 plugins {
   kotlin("jvm") version "1.3.72"
+  id("com.github.johnrengelman.shadow") version "6.0.0"
 }
 
 repositories {
@@ -17,7 +20,7 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
 }
 
-tasks.withType<Jar> {
+tasks.withType<ShadowJar> {
   manifest {
     attributes(
       mapOf(
