@@ -1,0 +1,12 @@
+[
+  {
+    "name": "com.kotlin.aws.runtime.ApiGatewayProxyRequest",
+    "allPublicConstructors" : true,
+    "allPublicMethods": true
+  },
+  {
+    "name": "java.util.LinkedHashMap",
+    "allPublicConstructors" : true,
+    "allPublicMethods": true
+  }
+]
