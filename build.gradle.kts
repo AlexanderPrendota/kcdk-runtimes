@@ -35,7 +35,7 @@ val createDockerfile by tasks.creating(Dockerfile::class) {
   defaultCommand(
     "-c",
     """
-      native-image --enable-url-protocols=http \
+      native-image --enable-url-protocols=https \
         -Djava.net.preferIPv4Stack=true \
         -H:+ReportUnsupportedElementsAtRuntime --no-server -jar /working/build/libs/$jarFileName; \
       mkdir -p /working/build/native; \
