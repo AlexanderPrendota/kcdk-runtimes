@@ -1,7 +1,9 @@
 package com.kotlin.aws.runtime.client
 
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.kotlin.aws.runtime.LambdaRouters
-import com.kotlin.aws.runtime.mapper
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -9,6 +11,7 @@ import java.net.http.HttpResponse
 import java.util.logging.Logger
 
 object LambdaHttpClient {
+    private val mapper: ObjectMapper = jacksonObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
     private val httpClient = HttpClient.newHttpClient()
     private val log = Logger.getLogger("Kotlin Custom Runtime")
 
