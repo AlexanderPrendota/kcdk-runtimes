@@ -1,4 +1,4 @@
-package com.kotlin.aws.runtime
+package com.kotlin.aws.runtime.handler
 
 import com.kotlin.aws.runtime.LambdaEnvironment.HANDLER_CLASS
 import com.kotlin.aws.runtime.LambdaEnvironment.LAMBDA_TASK_ROOT

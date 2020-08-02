@@ -1,4 +1,4 @@
-package com.kotlin.aws.runtime
+package com.kotlin.aws.runtime.objects
 
 data class ApiGatewayProxyRequest(
   var path: String,

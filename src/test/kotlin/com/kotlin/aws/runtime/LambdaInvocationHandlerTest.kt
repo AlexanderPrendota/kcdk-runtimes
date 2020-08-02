@@ -1,6 +1,7 @@
 package com.kotlin.aws.runtime
 
 import com.kotlin.aws.runtime.dumps.DumpClass
+import com.kotlin.aws.runtime.handler.LambdaInvocationHandler
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
