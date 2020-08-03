@@ -18,7 +18,7 @@ object LambdaInvocationHandler {
      * Find the Handler and Method on the classpath.
      */
     @Throws(java.lang.Exception::class)
-    fun handleInvocation(body: String): String = handleInvocation(LAMBDA_TASK_ROOT, HANDLER_CLASS, body)
+    fun handleInvocation(arguments: String?): String = handleInvocation(LAMBDA_TASK_ROOT, HANDLER_CLASS, arguments)
 
     @Throws(java.lang.Exception::class)
     internal fun handleInvocation(root: String, handler: String, arguments: Any?): String {
