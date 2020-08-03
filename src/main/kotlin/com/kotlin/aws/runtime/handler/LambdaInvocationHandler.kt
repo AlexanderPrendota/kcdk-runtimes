@@ -39,7 +39,8 @@ object LambdaInvocationHandler {
         payload: Any?
     ): String {
         val myClassObj = handlerClass.getConstructor().newInstance()
-        val args = if (payload == null) emptyArray() else arrayOf(payload)
+       // val args = if (payload == null) emptyArray() else arrayOf(payload)
+        val args = emptyArray<Any>() // TODO: for test only
         return handlerMethod.invoke(myClassObj, *args) as String
     }
 
