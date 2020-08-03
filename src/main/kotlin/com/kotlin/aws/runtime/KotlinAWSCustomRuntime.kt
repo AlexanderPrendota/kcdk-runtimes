@@ -19,6 +19,7 @@ fun main() {
 }
 
 internal fun initRuntime() {
+    log.info("Init Kotlin GraalVM Runtime.")
     while (true) {
         initLambdaInvocation { requestId, body ->
             handleLambdaInvocation(requestId, body)
@@ -28,8 +29,10 @@ internal fun initRuntime() {
 
 
 private fun initLambdaInvocation(handle: (String, String) -> Unit) {
+    log.info("Create lambda invocation..")
     try {
         val (requestId, apiGatewayProxyRequest) = createLambdaInvocation()
+        log.info("Get the invocation. Request ID: $requestId")
         handle(requestId, apiGatewayProxyRequest.body)
     } catch (t: Throwable) {
         t.printStackTrace()
