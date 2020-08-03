@@ -21,7 +21,7 @@ object LambdaInvocationHandler {
     fun handleInvocation(body: String): String = handleInvocation(LAMBDA_TASK_ROOT, HANDLER_CLASS, body)
 
     @Throws(java.lang.Exception::class)
-    internal fun handleInvocation(root: String, handler: String, body: String): String {
+    internal fun handleInvocation(root: String, handler: String, arguments: String): String {
         val handlerParts = handler.split("::")
         if (handlerParts.size != 2)
             error("Specify class and method for invocation. Example: `Class::method`. Current: $handler")
@@ -29,7 +29,7 @@ object LambdaInvocationHandler {
             ?: error("Handler class not found. Full class: $handler, ROOT_TASK: $root")
         val handlerMethod = getHandlerMethod(handlerClass, handlerParts[1])
             ?: error("Handler method not found. Full class: $handler")
-        return invokeClasses(handlerClass, handlerMethod, body)
+        return invokeClasses(handlerClass, handlerMethod, arguments)
     }
 
     @Throws(java.lang.Exception::class)

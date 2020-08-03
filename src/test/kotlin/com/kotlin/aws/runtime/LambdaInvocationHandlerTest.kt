@@ -16,7 +16,7 @@ internal class LambdaInvocationHandlerTest {
         val result = LambdaInvocationHandler.handleInvocation(
             root = resourceFolder.path,
             handler = "com.kotlin.aws.runtime.dumps.DumpClass::handle",
-            body = "Runtime"
+            arguments = "Runtime"
         )
         Assertions.assertEquals("Hello, Runtime", result)
     }
@@ -27,7 +27,7 @@ internal class LambdaInvocationHandlerTest {
             LambdaInvocationHandler.handleInvocation(
                 root = resourceFolder.path,
                 handler = "com.kotlin.aws.runtime.NoClass::hadler",
-                body = "test"
+                arguments = "test"
             )
         }
         Assertions.assertTrue(
@@ -44,7 +44,7 @@ internal class LambdaInvocationHandlerTest {
             LambdaInvocationHandler.handleInvocation(
                 root = resourceFolder.path,
                 handler = "com.kotlin.aws.runtime.dumps.DumpClass::$wrongMethod",
-                body = "test"
+                arguments = "test"
             )
         }
         Assertions.assertTrue(
@@ -57,7 +57,7 @@ internal class LambdaInvocationHandlerTest {
     @Test
     fun `read class & method test`() {
         val exception = assertThrows<IllegalStateException> {
-            LambdaInvocationHandler.handleInvocation(root = "root", handler = "test:tests", body = "test")
+            LambdaInvocationHandler.handleInvocation(root = "root", handler = "test:tests", arguments = "test")
         }
         Assertions.assertTrue(
             exception.message?.contains("Specify class and method for invocation.") == true,
