@@ -21,7 +21,7 @@ object LambdaInvocationHandler {
     fun handleInvocation(body: String): String = handleInvocation(LAMBDA_TASK_ROOT, HANDLER_CLASS, body)
 
     @Throws(java.lang.Exception::class)
-    internal fun handleInvocation(root: String, handler: String, arguments: String): String {
+    internal fun handleInvocation(root: String, handler: String, arguments: Any?): String {
         val handlerParts = handler.split("::")
         if (handlerParts.size != 2)
             error("Specify class and method for invocation. Example: `Class::method`. Current: $handler")
@@ -36,10 +36,10 @@ object LambdaInvocationHandler {
     private fun invokeClasses(
         handlerClass: Class<*>,
         handlerMethod: Method,
-        payload: String
+        payload: Any?
     ): String {
         val myClassObj = handlerClass.getConstructor().newInstance()
-        val args = arrayOf(payload)
+        val args = if (payload == null) emptyArray() else arrayOf(payload)
         return handlerMethod.invoke(myClassObj, *args) as String
     }
 

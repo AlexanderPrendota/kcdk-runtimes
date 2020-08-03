@@ -1,6 +1,7 @@
 package com.kotlin.aws.runtime
 
 import com.kotlin.aws.runtime.dumps.DumpClass
+import com.kotlin.aws.runtime.dumps.NoArgsClass
 import com.kotlin.aws.runtime.handler.LambdaInvocationHandler
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -19,6 +20,17 @@ internal class LambdaInvocationHandlerTest {
             arguments = "Runtime"
         )
         Assertions.assertEquals("Hello, Runtime", result)
+    }
+
+    @Test
+    fun `handle w o arguments`() {
+        val res = NoArgsClass::class.java.classLoader.getResource("") ?: error("No NoArgsClass found")
+        val result = LambdaInvocationHandler.handleInvocation(
+            root = res.path,
+            handler = "com.kotlin.aws.runtime.dumps.NoArgsClass::handle",
+            arguments = null
+        )
+        Assertions.assertEquals("Hello, from NoArgsClass!", result)
     }
 
     @Test
