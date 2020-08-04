@@ -1,6 +1,9 @@
+import com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer
+import com.bmuschko.gradle.docker.tasks.container.DockerLogsContainer
+import com.bmuschko.gradle.docker.tasks.container.DockerStartContainer
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import com.bmuschko.gradle.docker.tasks.container.*
-import com.bmuschko.gradle.docker.tasks.image.*
 import org.apache.tools.ant.taskdefs.condition.Os
 
 group = "org.example"
@@ -29,8 +32,10 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
 }
 
+val outputDirectory: String = "build/native"
+val nativeFileName = File(jarFileName).nameWithoutExtension
+
 val createDockerfile by tasks.creating(Dockerfile::class) {
-  val nativeFileName = File(jarFileName).nameWithoutExtension
   from("oracle/graalvm-ce:20.1.0-java11")
   instruction("RUN gu install native-image")
   instruction("RUN mkdir -p /working/build")
@@ -41,7 +46,7 @@ val createDockerfile by tasks.creating(Dockerfile::class) {
       native-image --enable-url-protocols=https \
         -Djava.net.preferIPv4Stack=true \
         -H:+ReportUnsupportedElementsAtRuntime --no-server -jar /working/build/libs/$jarFileName; \
-      mkdir -p /working/build/native; \
+      mkdir -p /working/$outputDirectory; \
       cp -f $nativeFileName /working/build/native/$nativeFileName;
     """.trimIndent()
   )
@@ -83,9 +88,27 @@ tasks.create("logContainer", DockerLogsContainer::class) {
   }
 }
 
-tasks.create("nativeBuild") {
+val nativeBuild = tasks.create("nativeBuild") {
   dependsOn(":shadowJar", startGraalNativeBuildContainer)
 }
+
+val buildRuntime by tasks.creating(Zip::class) {
+  dependsOn(nativeBuild)
+  from("./$outputDirectory")
+  from(generateBootstrap())
+}
+
+fun generateBootstrap(): File {
+  val file = File("bootstrap")
+  file.writeText("""
+      #!/bin/sh
+      set -euo pipefail
+      ./${nativeFileName}
+  """.trimIndent()
+  )
+  return file
+}
+
 
 tasks.withType<ShadowJar> {
   manifest {
