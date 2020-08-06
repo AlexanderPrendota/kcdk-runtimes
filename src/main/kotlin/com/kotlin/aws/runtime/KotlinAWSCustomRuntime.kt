@@ -44,7 +44,8 @@ private fun createLambdaInvocation(): AwsLambdaInvocation {
     val response = LambdaHttpClient.init()
     val requestId = response.headers().firstValue(REQUEST_HEADER_NAME).orElse(null)
         ?: error("Header: $REQUEST_HEADER_NAME was not found")
-    val apiGatewayProxyRequest = jacksonObjectMapper().readValue(response.body(), ApiGatewayProxyRequest::class.java)
+    //val apiGatewayProxyRequest = jacksonObjectMapper().readValue(response.body(), ApiGatewayProxyRequest::class.java)
+    val apiGatewayProxyRequest = ApiGatewayProxyRequest()
     printContext(requestId, response, apiGatewayProxyRequest)
     return AwsLambdaInvocation(requestId, apiGatewayProxyRequest)
 }
