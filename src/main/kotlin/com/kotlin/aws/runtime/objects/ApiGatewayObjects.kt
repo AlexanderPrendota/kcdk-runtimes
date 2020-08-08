@@ -3,7 +3,7 @@ package com.kotlin.aws.runtime.objects
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class ApiGatewayProxyRequest(
+class ApiGatewayProxyRequest(
     var path: String = "",
     var httpMethod: String = "GET",
     var headers: Map<String, String> = emptyMap(),
