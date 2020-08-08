@@ -16,10 +16,10 @@ class AwsLambdaRuntimeApiRestController {
 
     @GetMapping("/invocation/next")
     fun initEndpoint() = ResponseEntity.ok()
-        .header(REQUEST_HEADER_NAME, "mock")
-        .header(INVOKED_FUNCTION_ARN, "mock")
-        .header(DEADLINE_HEADER_NAME, "mock")
-        .body(AwsLambdaRuntimeInitResponse())
+        .header(REQUEST_HEADER_NAME, "3551dcfa-ea7d-4a91-872c-b8e2996030cf")
+        .header(INVOKED_FUNCTION_ARN, "arn:aws:lambda:eu-west-1:290147673817:function:mock-mock-merged-0")
+        .header(DEADLINE_HEADER_NAME, "1596748655122")
+        .body(MOCK)
 
     @PostMapping("/init/error")
     @ResponseStatus(code = HttpStatus.OK)
