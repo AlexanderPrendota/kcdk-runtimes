@@ -20,10 +20,10 @@ object LambdaHttpClient {
         return httpClient.send(request, HttpResponse.BodyHandlers.ofString())
     }
 
-    fun invoke(requestId: String, body: String) {
+    fun invoke(requestId: String, bytes: ByteArray?) {
         val request = HttpRequest.newBuilder()
             .uri(URI.create(LambdaRouters.getInvocationResponse(requestId)))
-            .POST(HttpRequest.BodyPublishers.ofString(body))
+            .POST(HttpRequest.BodyPublishers.ofByteArray(bytes))
             .build()
         httpClient.send(request, HttpResponse.BodyHandlers.ofString())
     }
