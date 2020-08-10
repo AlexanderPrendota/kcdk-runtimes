@@ -1,8 +1,10 @@
 package com.kotlin.aws.runtime
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.kotlin.aws.runtime.dumps.DumpClass
 import com.kotlin.aws.runtime.dumps.NoArgsClass
 import com.kotlin.aws.runtime.handler.LambdaInvocationHandler
+import com.kotlin.aws.runtime.objects.ApiGatewayProxyRequest
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -17,9 +19,9 @@ internal class LambdaInvocationHandlerTest {
         val result = LambdaInvocationHandler.handleInvocation(
             root = resourceFolder.path,
             handler = "com.kotlin.aws.runtime.dumps.DumpClass::handle",
-            arguments = "Runtime"
+            apiGatewayProxyRequest = ApiGatewayProxyRequest(body = "body")
         )
-        Assertions.assertEquals("Hello, Runtime", result)
+        Assertions.assertEquals("Hello!", result.toStringFromBytes())
     }
 
     @Test
@@ -28,9 +30,9 @@ internal class LambdaInvocationHandlerTest {
         val result = LambdaInvocationHandler.handleInvocation(
             root = res.path,
             handler = "com.kotlin.aws.runtime.dumps.NoArgsClass::handle",
-            arguments = null
+            apiGatewayProxyRequest = ApiGatewayProxyRequest()
         )
-        Assertions.assertEquals("Hello, from NoArgsClass!", result)
+        Assertions.assertEquals("Hello, from NoArgsClass!", result.toStringFromBytes())
     }
 
     @Test
@@ -39,7 +41,7 @@ internal class LambdaInvocationHandlerTest {
             LambdaInvocationHandler.handleInvocation(
                 root = resourceFolder.path,
                 handler = "com.kotlin.aws.runtime.NoClass::hadler",
-                arguments = "test"
+                apiGatewayProxyRequest = ApiGatewayProxyRequest()
             )
         }
         Assertions.assertTrue(
@@ -56,7 +58,7 @@ internal class LambdaInvocationHandlerTest {
             LambdaInvocationHandler.handleInvocation(
                 root = resourceFolder.path,
                 handler = "com.kotlin.aws.runtime.dumps.DumpClass::$wrongMethod",
-                arguments = "test"
+                apiGatewayProxyRequest = ApiGatewayProxyRequest()
             )
         }
         Assertions.assertTrue(
@@ -69,11 +71,17 @@ internal class LambdaInvocationHandlerTest {
     @Test
     fun `read class & method test`() {
         val exception = assertThrows<IllegalStateException> {
-            LambdaInvocationHandler.handleInvocation(root = "root", handler = "test:tests", arguments = "test")
+            LambdaInvocationHandler.handleInvocation(
+                root = "root",
+                handler = "test:tests",
+                apiGatewayProxyRequest = ApiGatewayProxyRequest()
+            )
         }
         Assertions.assertTrue(
             exception.message?.contains("Specify class and method for invocation.") == true,
             "Parsing exception. Message: ${exception.message}"
         )
     }
+
+    private fun ByteArray.toStringFromBytes(): String = jacksonObjectMapper().readValue(this, String::class.java)
 }

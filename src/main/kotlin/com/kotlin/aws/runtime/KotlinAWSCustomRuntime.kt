@@ -21,19 +21,19 @@ fun main() {
 internal fun initRuntime() {
     log.info("Init Kotlin GraalVM Runtime.")
     while (true) {
-        initLambdaInvocation { requestId, body ->
-            handleLambdaInvocation(requestId, body)
+        initLambdaInvocation { requestId, awsLambdaInvocation ->
+            handleLambdaInvocation(requestId, awsLambdaInvocation)
         }
     }
 }
 
 
-private fun initLambdaInvocation(handle: (String, String?) -> Unit) {
+private fun initLambdaInvocation(handle: (String, ApiGatewayProxyRequest) -> Unit) {
     log.info("Create lambda invocation..")
     try {
         val (requestId, apiGatewayProxyRequest) = createLambdaInvocation()
         log.info("Get the invocation. Request ID: $requestId")
-        handle(requestId, apiGatewayProxyRequest.body)
+        handle(requestId, apiGatewayProxyRequest)
     } catch (t: Throwable) {
         t.printStackTrace()
         LambdaHttpClient.postInitError(t.message)
@@ -64,9 +64,9 @@ private fun printContext(
 }
 
 
-private fun handleLambdaInvocation(requestId: String, body: String?) {
+private fun handleLambdaInvocation(requestId: String, apiGatewayProxyRequest: ApiGatewayProxyRequest) {
     try {
-        val result = LambdaInvocationHandler.handleInvocation(body)
+        val result = LambdaInvocationHandler.handleInvocation(apiGatewayProxyRequest)
         LambdaHttpClient.invoke(requestId, result)
     } catch (t: Throwable) {
         t.printStackTrace()

@@ -3,6 +3,7 @@ package com.kotlin.aws.runtime.handler
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.kotlin.aws.runtime.LambdaEnvironment.HANDLER_CLASS
 import com.kotlin.aws.runtime.LambdaEnvironment.LAMBDA_TASK_ROOT
+import com.kotlin.aws.runtime.objects.ApiGatewayProxyRequest
 import java.io.File
 import java.lang.reflect.Method
 import java.net.MalformedURLException
@@ -19,10 +20,15 @@ object LambdaInvocationHandler {
      * Find the Handler and Method on the classpath.
      */
     @Throws(java.lang.Exception::class)
-    fun handleInvocation(arguments: String?): ByteArray = handleInvocation(LAMBDA_TASK_ROOT, HANDLER_CLASS, arguments)
+    fun handleInvocation(apiGatewayProxyRequest: ApiGatewayProxyRequest): ByteArray =
+        handleInvocation(LAMBDA_TASK_ROOT, HANDLER_CLASS, apiGatewayProxyRequest)
 
     @Throws(java.lang.Exception::class)
-    internal fun handleInvocation(root: String, handler: String, arguments: Any?): ByteArray {
+    internal fun handleInvocation(
+        root: String,
+        handler: String,
+        apiGatewayProxyRequest: ApiGatewayProxyRequest
+    ): ByteArray {
         val handlerParts = handler.split("::")
         if (handlerParts.size != 2)
             error("Specify class and method for invocation. Example: `Class::method`. Current: $handler")
@@ -30,18 +36,17 @@ object LambdaInvocationHandler {
             ?: error("Handler class not found. Full class: $handler, ROOT_TASK: $root")
         val handlerMethod = getHandlerMethod(handlerClass, handlerParts[1])
             ?: error("Handler method not found. Full class: $handler")
-        return invokeClasses(handlerClass, handlerMethod, arguments)
+        return invokeClasses(handlerClass, handlerMethod, apiGatewayProxyRequest)
     }
 
     @Throws(java.lang.Exception::class)
     private fun invokeClasses(
         handlerClass: Class<*>,
         handlerMethod: Method,
-        payload: Any?
+        apiGatewayProxyRequest: ApiGatewayProxyRequest
     ): ByteArray {
         val myClassObj = handlerClass.getConstructor().newInstance()
-       // val args = if (payload == null) emptyArray() else arrayOf(payload)
-        val args = emptyArray<Any>() // TODO: for test only
+        val args = if (handlerMethod.parameterCount == 1) arrayOf(apiGatewayProxyRequest) else arrayOf() // TODO tmp & handle > 1
         val result = handlerMethod.invoke(myClassObj, *args)
         return jacksonObjectMapper().writeValueAsBytes(result)
     }
