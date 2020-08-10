@@ -28,7 +28,7 @@ internal fun initRuntime() {
 }
 
 
-private fun initLambdaInvocation(handle: (String, String) -> Unit) {
+private fun initLambdaInvocation(handle: (String, String?) -> Unit) {
     log.info("Create lambda invocation..")
     try {
         val (requestId, apiGatewayProxyRequest) = createLambdaInvocation()
@@ -44,8 +44,7 @@ private fun createLambdaInvocation(): AwsLambdaInvocation {
     val response = LambdaHttpClient.init()
     val requestId = response.headers().firstValue(REQUEST_HEADER_NAME).orElse(null)
         ?: error("Header: $REQUEST_HEADER_NAME was not found")
-    //val apiGatewayProxyRequest = jacksonObjectMapper().readValue(response.body(), ApiGatewayProxyRequest::class.java)
-    val apiGatewayProxyRequest = ApiGatewayProxyRequest()
+    val apiGatewayProxyRequest = jacksonObjectMapper().readValue(response.body(), ApiGatewayProxyRequest::class.java)
     printContext(requestId, response, apiGatewayProxyRequest)
     return AwsLambdaInvocation(requestId, apiGatewayProxyRequest)
 }
@@ -65,7 +64,7 @@ private fun printContext(
 }
 
 
-private fun handleLambdaInvocation(requestId: String, body: String) {
+private fun handleLambdaInvocation(requestId: String, body: String?) {
     try {
         val result = LambdaInvocationHandler.handleInvocation(body)
         LambdaHttpClient.invoke(requestId, result)
