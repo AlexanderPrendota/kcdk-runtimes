@@ -28,7 +28,7 @@ internal object LambdaEnvironment {
     val FUNCTION_VERSION: String = System.getenv("AWS_LAMBDA_FUNCTION_VERSION") ?: "-1"
     val LOG_GROUP_NAME: String = System.getenv("AWS_LAMBDA_LOG_GROUP_NAME") ?: "local"
     val MEMORY_LIMIT: Int = System.getenv("AWS_LAMBDA_FUNCTION_MEMORY_SIZE")?.toIntOrNull() ?: 1024
-    val FUNCTION_NAME: String = System.getenv("AWS_LAMBDA_FUNCTION_NAME")
+    val FUNCTION_NAME: String = System.getenv("AWS_LAMBDA_FUNCTION_NAME") ?: ""
     val LOG_STREAM_NAME: String = System.getenv("AWS_LAMBDA_LOG_STREAM_NAME") ?: "local"
 
 }
