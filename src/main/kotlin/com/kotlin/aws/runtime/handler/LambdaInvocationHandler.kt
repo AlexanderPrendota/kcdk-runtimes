@@ -1,5 +1,6 @@
 package com.kotlin.aws.runtime.handler
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.kotlin.aws.runtime.LambdaEnvironment.HANDLER_CLASS
 import com.kotlin.aws.runtime.LambdaEnvironment.LAMBDA_TASK_ROOT
 import java.io.File
@@ -18,10 +19,10 @@ object LambdaInvocationHandler {
      * Find the Handler and Method on the classpath.
      */
     @Throws(java.lang.Exception::class)
-    fun handleInvocation(arguments: String?): String = handleInvocation(LAMBDA_TASK_ROOT, HANDLER_CLASS, arguments)
+    fun handleInvocation(arguments: String?): ByteArray = handleInvocation(LAMBDA_TASK_ROOT, HANDLER_CLASS, arguments)
 
     @Throws(java.lang.Exception::class)
-    internal fun handleInvocation(root: String, handler: String, arguments: Any?): String {
+    internal fun handleInvocation(root: String, handler: String, arguments: Any?): ByteArray {
         val handlerParts = handler.split("::")
         if (handlerParts.size != 2)
             error("Specify class and method for invocation. Example: `Class::method`. Current: $handler")
@@ -37,11 +38,12 @@ object LambdaInvocationHandler {
         handlerClass: Class<*>,
         handlerMethod: Method,
         payload: Any?
-    ): String {
+    ): ByteArray {
         val myClassObj = handlerClass.getConstructor().newInstance()
        // val args = if (payload == null) emptyArray() else arrayOf(payload)
         val args = emptyArray<Any>() // TODO: for test only
-        return handlerMethod.invoke(myClassObj, *args) as String
+        val result = handlerMethod.invoke(myClassObj, *args)
+        return jacksonObjectMapper().writeValueAsBytes(result)
     }
 
     @Throws(java.lang.Exception::class)
