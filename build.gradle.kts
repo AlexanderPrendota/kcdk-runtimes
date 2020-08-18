@@ -35,6 +35,14 @@ dependencies {
 val outputDirectory: String = "build/native"
 val nativeFileName = File(jarFileName).nameWithoutExtension
 
+val graalVmFlags = listOf(
+  "--enable-url-protocols=https",
+  "-Djava.net.preferIPv4Stack=true",
+  "-H:+ReportUnsupportedElementsAtRuntime",
+  "--no-server",
+  "-jar"
+).joinToString(" ")
+
 val createDockerfile by tasks.creating(Dockerfile::class) {
   from("oracle/graalvm-ce:20.1.0-java11")
   instruction("RUN gu install native-image")
@@ -43,9 +51,7 @@ val createDockerfile by tasks.creating(Dockerfile::class) {
   defaultCommand(
     "-c",
     """
-      native-image --enable-url-protocols=https \
-        -Djava.net.preferIPv4Stack=true \
-        -H:+ReportUnsupportedElementsAtRuntime --no-server -jar /working/build/libs/$jarFileName; \
+      native-image $graalVmFlags /working/build/libs/$jarFileName; \
       mkdir -p /working/$outputDirectory; \
       cp -f $nativeFileName /working/build/native/$nativeFileName;
     """.trimIndent()
