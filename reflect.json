@@ -1,6 +1,6 @@
 [
   {
-    "name": "com.kotlin.aws.runtime.ApiGatewayProxyRequest",
+    "name": "com.kotlin.aws.runtime.objects.ApiGatewayProxyRequest",
     "allPublicConstructors": true,
     "allPublicMethods": true
   },
