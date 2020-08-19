@@ -34,10 +34,13 @@ dependencies {
 
 val outputDirectory: String = "build/native"
 val nativeFileName = File(jarFileName).nameWithoutExtension
+val reflectConfigFileName = "reflect.json"
 
 val graalVmFlags = listOf(
   "--enable-url-protocols=https",
   "-Djava.net.preferIPv4Stack=true",
+  "-H:+AllowIncompleteClasspath",
+  "-H:ReflectionConfigurationFiles=/working/$reflectConfigFileName",
   "-H:+ReportUnsupportedElementsAtRuntime",
   "--no-server",
   "-jar"
@@ -75,7 +78,12 @@ val createGraalNativeBuildContainer by tasks.creating(DockerCreateContainer::cla
   dependsOn(buildGraalNativeBuildImage)
   targetImageId(buildGraalNativeBuildImage.imageId)
   hostConfig.autoRemove.set(true)
-  hostConfig.binds.set(mapOf(buildDir to "/working/build"))
+  hostConfig.binds.set(
+    mapOf(
+      buildDir to "/working/build",
+      "${buildDir}/../$reflectConfigFileName" to "/working/$reflectConfigFileName"
+    )
+  )
 }
 
 val startGraalNativeBuildContainer by tasks.creating(DockerStartContainer::class) {
