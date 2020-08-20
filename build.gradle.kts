@@ -42,6 +42,7 @@ val graalVmFlags = listOf(
   "-H:+AllowIncompleteClasspath",
   "-H:ReflectionConfigurationFiles=/working/$reflectConfigFileName",
   "-H:+ReportUnsupportedElementsAtRuntime",
+  "--initialize-at-build-time=io.ktor,kotlinx,kotlin",
   "--no-server",
   "-jar"
 ).joinToString(" ")
