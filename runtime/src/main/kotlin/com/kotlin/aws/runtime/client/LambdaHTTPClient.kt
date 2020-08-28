@@ -10,8 +10,10 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
-object LambdaHttpClient {
+object LambdaHTTPClient {
+    //TODO better to replace with fast kotlinx.serialization
     private val mapper: ObjectMapper = jacksonObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+    //Use ktor client?
     private val httpClient = HttpClient.newHttpClient()
 
 

@@ -1,12 +1,9 @@
 package com.kotlin.aws.runtime
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.kotlin.aws.runtime.LambdaEnvironment.DEADLINE_HEADER_NAME
 import com.kotlin.aws.runtime.LambdaEnvironment.INVOKED_FUNCTION_ARN
 import com.kotlin.aws.runtime.LambdaEnvironment.REQUEST_HEADER_NAME
-import com.kotlin.aws.runtime.client.LambdaHttpClient
-import com.kotlin.aws.runtime.handler.LambdaInvocationHandler
-import com.kotlin.aws.runtime.objects.ApiGatewayProxyRequest
+import com.kotlin.aws.runtime.client.LambdaHTTPClient
 import com.kotlin.aws.runtime.objects.AwsLambdaInvocation
 import com.kotlin.aws.runtime.objects.LambdaContext
 import java.net.http.HttpResponse
@@ -15,20 +12,15 @@ import java.util.logging.Logger
 val log: Logger = Logger.getLogger("Kotlin Custom Runtime")
 
 fun main() {
-    initRuntime()
-}
-
-internal fun initRuntime() {
     log.info("Init Kotlin GraalVM Runtime.")
     while (true) {
         initLambdaInvocation { requestId, awsLambdaInvocation ->
-            handleLambdaInvocation(requestId, awsLambdaInvocation)
+            Adapter.handleLambdaInvocation(requestId, awsLambdaInvocation)
         }
     }
 }
 
-
-private fun initLambdaInvocation(handle: (String, ApiGatewayProxyRequest) -> Unit) {
+private fun initLambdaInvocation(handle: (requestId: String, apiGatewayProxyRequest: String) -> Unit) {
     log.info("Create lambda invocation..")
     try {
         val (requestId, apiGatewayProxyRequest) = createLambdaInvocation()
@@ -36,15 +28,15 @@ private fun initLambdaInvocation(handle: (String, ApiGatewayProxyRequest) -> Uni
         handle(requestId, apiGatewayProxyRequest)
     } catch (t: Throwable) {
         t.printStackTrace()
-        LambdaHttpClient.postInitError(t.message)
+        LambdaHTTPClient.postInitError(t.message)
     }
 }
 
 private fun createLambdaInvocation(): AwsLambdaInvocation {
-    val response = LambdaHttpClient.init()
+    val response = LambdaHTTPClient.init()
     val requestId = response.headers().firstValue(REQUEST_HEADER_NAME).orElse(null)
         ?: error("Header: $REQUEST_HEADER_NAME was not found")
-    val apiGatewayProxyRequest = jacksonObjectMapper().readValue(response.body(), ApiGatewayProxyRequest::class.java)
+    val apiGatewayProxyRequest = response.body()
     printContext(requestId, response, apiGatewayProxyRequest)
     return AwsLambdaInvocation(requestId, apiGatewayProxyRequest)
 }
@@ -52,7 +44,7 @@ private fun createLambdaInvocation(): AwsLambdaInvocation {
 private fun printContext(
     requestId: String,
     response: HttpResponse<String>,
-    apiGatewayProxyRequest: ApiGatewayProxyRequest
+    apiGatewayProxyRequest: String
 ) {
     val deadLineTime = response.headers().firstValue(DEADLINE_HEADER_NAME).orElse("0").toLong()
     val invokedFuncArn = response.headers().firstValue(INVOKED_FUNCTION_ARN).orElse(null)
@@ -61,17 +53,6 @@ private fun printContext(
     log.info("Parsed body: $apiGatewayProxyRequest")
     log.info("Response body: ${response.body()}")
     log.info("Lambda context: $context")
-}
-
-
-private fun handleLambdaInvocation(requestId: String, apiGatewayProxyRequest: ApiGatewayProxyRequest) {
-    try {
-        val result = LambdaInvocationHandler.handleInvocation(apiGatewayProxyRequest)
-        LambdaHttpClient.invoke(requestId, result)
-    } catch (t: Throwable) {
-        t.printStackTrace()
-        LambdaHttpClient.postInvokeError(requestId, t.message)
-    }
 }
 
 
