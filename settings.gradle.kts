@@ -1,4 +1,4 @@
-rootProject.name = "kotlin-graalvm-aws-lambda-custom-runtime"
+rootProject.name = "kotlin-aws-lambda-custom-runtimes"
 
 include(":runtime")
 include(":plugin")
