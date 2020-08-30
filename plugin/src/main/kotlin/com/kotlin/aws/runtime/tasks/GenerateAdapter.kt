@@ -2,8 +2,6 @@ package com.kotlin.aws.runtime.tasks
 
 import com.kotlin.aws.runtime.runtime
 import com.kotlin.aws.runtime.utils.Groups
-import com.kotlin.aws.runtime.utils.myKtSourceSetFiles
-import com.kotlin.aws.runtime.utils.mySourceSets
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputDirectory
@@ -26,7 +24,8 @@ open class GenerateAdapter : DefaultTask() {
 
     @TaskAction
     fun act() {
-        val (klass, function) = handler?.split("::") ?: error("`handler` field should be set via `runtime` extension")
+        val (klass, function) = handler?.split("::")
+            ?: error("`handler` field should be set via `runtime` extension")
 
         val genDir = generationPath ?: project.file("src/main/kotlin-gen")
 

@@ -98,20 +98,18 @@ object ConfigureGraal {
                 }
             }
 
-            val startContainer = tasks.create("startGraalContainer",
-                    DockerStartContainer::class.java
-                ) {
-
+            val startContainer = tasks.create(
+                "startGraalContainer",
+                DockerStartContainer::class.java
+            ) {
                 it.group = Groups.`graal setup`
-
                 it.dependsOn(nativeContainer)
-                    it.targetContainerId(nativeContainer.containerId)
-                    it.finalizedBy(logs)
-                }
+                it.targetContainerId(nativeContainer.containerId)
+                it.finalizedBy(logs)
+            }
 
             val nativeBuild = tasks.create("buildGraalExecutable") {
                 it.group = Groups.`graal setup`
-
                 it.dependsOn(shadowJar, startContainer)
             }
 
@@ -123,6 +121,7 @@ object ConfigureGraal {
 
                 file.parentFile.mkdirs()
                 file.createNewFile()
+                //language=sh
                 file.writeText(
                     """
                         #!/bin/sh
@@ -135,14 +134,12 @@ object ConfigureGraal {
 
             val buildRuntime = tasks.create("buildGraalRuntime", Zip::class.java) {
                 it.group = Groups.graal
-
                 it.dependsOn(nativeBuild)
                 it.from(outputDirectory)
                 it.from(generateBootstrap())
             }
         }
     }
-
 
 
     //TODO probable reflect.json should be configurable and we should have few preconfigured

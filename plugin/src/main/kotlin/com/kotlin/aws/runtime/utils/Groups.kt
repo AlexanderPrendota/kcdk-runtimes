@@ -1,8 +1,8 @@
 package com.kotlin.aws.runtime.utils
 
 object Groups {
-    val `graal setup` = "graal setup"
-    val graal = "graal"
-    val shadow = "shadow"
-    val build = "build"
+    const val `graal setup` = "graal setup"
+    const val graal = "graal"
+    const val shadow = "shadow"
+    const val build = "build"
 }

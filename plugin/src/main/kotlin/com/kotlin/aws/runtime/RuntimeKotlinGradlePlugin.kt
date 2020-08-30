@@ -22,26 +22,20 @@ class RuntimeKotlinGradlePlugin : Plugin<Project> {
         val jar = target.tasks.create("graalJar", Jar::class.java) {
             it.group = Groups.build
 
-            it.manifest {
-                it.attributes(
-                    mapOf(
-                        "Main-Class" to "com.kotlin.aws.runtime.KotlinAWSCustomRuntimeKt"
-                    )
+            it.manifest { manifest ->
+                manifest.attributes(
+                    mapOf("Main-Class" to "com.kotlin.aws.runtime.KotlinAWSCustomRuntimeKt")
                 )
             }
         }
 
         val shadow = target.tasks.create("shadowJarGraal", ShadowJar::class.java) {
             it.group = Groups.shadow
-
             it.archiveClassifier.set("graal")
             it.archiveVersion.set("")
-
             it.from(target.mySourceSets["main"].output)
-
             it.configurations.add(target.configurations["compileClasspath"])
             it.configurations.add(target.configurations["runtimeClasspath"])
-
             it.manifest.inheritFrom(jar.manifest)
         }
 
