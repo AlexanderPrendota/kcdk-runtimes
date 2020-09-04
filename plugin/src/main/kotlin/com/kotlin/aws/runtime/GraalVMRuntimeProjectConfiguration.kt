@@ -24,10 +24,8 @@ internal fun configureGraalVM(target: Project) {
                 this["main"].java.srcDir(runtime.generationPath!!)
             }
         }
-        generateAdapter()
-
         //TODO disabled for now, since generated sources are ignored during compilation
-        // target.tasks["classes"].dependsOn(generateAdapter)
+        tasks.getByName("classes").dependsOn(generateAdapter())
         ConfigureGraal.apply(target, shadow)
     }
 }
