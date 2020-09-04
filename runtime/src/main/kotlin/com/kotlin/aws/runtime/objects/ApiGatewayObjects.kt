@@ -49,6 +49,6 @@ data class AwsLambdaRequestIdentity(
 )
 
 data class AwsLambdaInvocation(
-    val requestId: String,
+    val context: LambdaContext,
     val apiGatewayProxyRequest: String
 )

@@ -37,23 +37,24 @@ open class GenerateAdapter : DefaultTask() {
                     package com.kotlin.aws.runtime
                     
                     import $klass
+                    import com.amazonaws.services.lambda.runtime.Context
                     import com.kotlin.aws.runtime.client.LambdaHTTPClient
                     import java.io.ByteArrayOutputStream
 
                     val server = ${klass}()
 
                     object Adapter {
-                        fun handleLambdaInvocation(requestId: String, apiGatewayProxyRequest: String) {
+                        fun handleLambdaInvocation(context: Context, apiGatewayProxyRequest: String) {
                             try {
                                 val input = apiGatewayProxyRequest.byteInputStream()
                                 val output = ByteArrayOutputStream()
 
-                                server.${function}(input, output, null)
+                                server.${function}(input, output, context)
 
-                                LambdaHTTPClient.invoke(requestId, output.toByteArray())
+                                LambdaHTTPClient.invoke(context.awsRequestId, output.toByteArray())
                             } catch (t: Throwable) {
                                 t.printStackTrace()
-                                LambdaHTTPClient.postInvokeError(requestId, t.message)
+                                LambdaHTTPClient.postInvokeError(context.awsRequestId, t.message)
                             }
                         }
                     }
