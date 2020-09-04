@@ -6,10 +6,17 @@ import java.io.Serializable
 @DslMarker
 annotation class RuntimeDSLTag
 
-open class RuntimePluginExtension : Serializable {
+class RuntimePluginExtension : Serializable {
     var handler: String? = null
     var generationPath: File? = null
-    val config: RuntimeConfig? = null
+
+    internal val config: RuntimeConfig = RuntimeConfig()
+
+    @RuntimeDSLTag
+    fun config(configure: RuntimeConfig.() -> Unit) {
+        config.configure()
+    }
+
 }
 
 internal var runtime = RuntimePluginExtension()
