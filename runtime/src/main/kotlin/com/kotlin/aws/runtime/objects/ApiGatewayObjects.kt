@@ -1,8 +1,5 @@
 package com.kotlin.aws.runtime.objects
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-
-@JsonIgnoreProperties(ignoreUnknown = true)
 data class ApiGatewayProxyRequest(
     val body: String? = null,
     val headers: Map<String, String> = emptyMap(),

@@ -1,6 +1,6 @@
-package com.kotlin.aws.runtime.tasks
+package com.kotlin.aws.runtime.graal.tasks
 
-import com.kotlin.aws.runtime.runtime
+import com.kotlin.aws.runtime.dsl.runtime
 import com.kotlin.aws.runtime.utils.Groups
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
@@ -32,7 +32,6 @@ open class GenerateAdapter : DefaultTask() {
         with(File(genDir, "com/kotlin/aws/runtime/Adapter.kt")) {
             parentFile.mkdirs()
             writeText(
-                //TODO remove ktor related parts
                 //language=kotlin
                 """
                     package com.kotlin.aws.runtime
@@ -40,11 +39,9 @@ open class GenerateAdapter : DefaultTask() {
                     import $klass
                     import com.kotlin.aws.runtime.client.LambdaHTTPClient
                     import java.io.ByteArrayOutputStream
-                    import io.ktor.server.engine.*
 
                     val server = ${klass}()
 
-                    @OptIn(EngineAPI::class)
                     object Adapter {
                         fun handleLambdaInvocation(requestId: String, apiGatewayProxyRequest: String) {
                             try {

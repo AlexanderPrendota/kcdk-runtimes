@@ -4,11 +4,14 @@ import tanvd.kosogor.proxy.publishJar
 group = rootProject.group
 version = rootProject.version
 
+plugins {
+    kotlin("plugin.serialization") version "1.3.72"
+}
+
 dependencies {
     api(kotlin("stdlib"))
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.3")
-
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0")
     api("com.amazonaws:aws-lambda-java-events:3.1.1")
     api("com.amazonaws:aws-lambda-java-core:1.2.1")
 
