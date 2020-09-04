@@ -11,7 +11,7 @@ import org.gradle.jvm.tasks.Jar
 import org.gradle.kotlin.dsl.get
 
 
-fun configureGraalVM(target: Project) {
+internal fun configureGraalVM(target: Project) {
     target.pluginManager.apply("com.github.johnrengelman.shadow")
     target.pluginManager.apply("com.bmuschko.docker-remote-api")
 
