@@ -2,7 +2,6 @@
 
 package com.kotlin.aws.runtime
 
-import com.kotlin.aws.runtime.graal.configureGraalVM
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

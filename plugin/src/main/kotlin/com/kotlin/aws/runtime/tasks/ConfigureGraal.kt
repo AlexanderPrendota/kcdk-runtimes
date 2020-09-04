@@ -1,4 +1,4 @@
-package com.kotlin.aws.runtime.graal.tasks
+package com.kotlin.aws.runtime.tasks
 
 import com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer
 import com.bmuschko.gradle.docker.tasks.container.DockerLogsContainer

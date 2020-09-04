@@ -1,13 +1,15 @@
-package com.kotlin.aws.runtime.graal.tasks
+package com.kotlin.aws.runtime.tasks
 
 import com.kotlin.aws.runtime.dsl.runtime
 import com.kotlin.aws.runtime.utils.Groups
 import org.gradle.api.DefaultTask
+import org.gradle.api.Project
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 
+internal fun Project.generateAdapter() = tasks.create("generateAdapter", GenerateAdapter::class.java)
 
 open class GenerateAdapter : DefaultTask() {
     init {
