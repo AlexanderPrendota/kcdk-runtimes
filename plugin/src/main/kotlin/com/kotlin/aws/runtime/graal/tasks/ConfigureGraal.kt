@@ -42,12 +42,16 @@ object ConfigureGraal {
             val startContainer = createStartContainer(nativeContainer, logs)
             val nativeBuild = createNativeBuild(shadowJar, startContainer)
 
-            tasks.create("buildGraalRuntime", Zip::class.java) {
-                it.group = Groups.graal
-                it.dependsOn(nativeBuild)
-                it.from(outputDirectory)
-                it.from(generateBootstrap(buildDir, nativeFileName))
-            }
+            initGraalRuntimeTask(nativeBuild, nativeFileName, outputDirectory)
+        }
+    }
+
+    private fun Project.initGraalRuntimeTask(nativeBuild: Task, nativeFileName: String, outputDirectory: File) {
+        tasks.create("buildGraalRuntime", Zip::class.java) {
+            it.group = Groups.graal
+            it.dependsOn(nativeBuild)
+            it.from(outputDirectory)
+            it.from(generateBootstrap(buildDir, nativeFileName))
         }
     }
 
@@ -99,11 +103,7 @@ object ConfigureGraal {
             it.dependsOn(nativeImage)
             it.targetImageId(nativeImage.imageId)
             it.hostConfig.autoRemove.set(true)
-            it.hostConfig.binds.set(
-                mapOf(
-                    buildDir to "/working/build"
-                )
-            )
+            it.hostConfig.binds.set(mapOf(buildDir to "/working/build"))
         }
     }
 
