@@ -55,7 +55,7 @@ open class GenerateAdapter : DefaultTask() {
 
                                 LambdaHTTPClient.invoke(context.awsRequestId, output.toByteArray())
                             } catch (t: Throwable) {
-                                t.printStackTrace()
+                                context.logger.log("Invocation error: " + t.message)
                                 LambdaHTTPClient.postInvokeError(context.awsRequestId, t.message)
                             }
                         }
