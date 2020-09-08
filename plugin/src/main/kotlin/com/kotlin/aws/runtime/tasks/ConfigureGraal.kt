@@ -72,7 +72,7 @@ internal object ConfigureGraal {
                     """
                         ls /working/build/libs; \
                         native-image $graalVmFlags /working/build/libs/$jarFileName; \
-                        mkdir -p /working/native; \
+                        mkdir -p /working/build/native; \
                         cp -f $nativeFileName /working/build/native/$nativeFileName;
                     """.trimIndent()
                 )
