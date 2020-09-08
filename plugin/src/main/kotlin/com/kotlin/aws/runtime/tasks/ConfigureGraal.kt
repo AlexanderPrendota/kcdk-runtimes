@@ -30,7 +30,6 @@ internal object ConfigureGraal {
     ).joinToString(" ")
 
 
-    //FIXME docker tend to create folders with sudo that are not deletable under original user
     internal fun apply(project: Project, shadowJar: ShadowJar) {
         with(project) {
             val outputDirectory = File(buildDir, "native")
