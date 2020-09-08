@@ -6,11 +6,14 @@ import com.bmuschko.gradle.docker.tasks.container.DockerStartContainer
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import com.kotlin.aws.runtime.dsl.runtime
 import com.kotlin.aws.runtime.utils.Groups
+import com.kotlin.aws.runtime.utils.mySourceSets
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.bundling.Zip
+import org.gradle.kotlin.dsl.get
 import shadow.org.codehaus.plexus.util.Os
 import java.io.File
 import java.nio.file.Files
@@ -28,8 +31,29 @@ val GRAAL_VM_FLAGS = listOf(
 ).joinToString(" ")
 
 object ConfigureGraal {
+
+    internal fun configure(target: Project) {
+        with(target) {
+            pluginManager.apply("com.github.johnrengelman.shadow")
+            pluginManager.apply("com.bmuschko.docker-remote-api")
+            val jar = createGraalJar()
+            val shadow = createShadowJarGraal(jar)
+            afterEvaluate {
+                //FIXME
+                // for some reason if we add generated sources via that command
+                // sources are ignored during compilation
+                target.mySourceSets.apply {
+                    this["main"].java.srcDir(runtime.generationPath!!)
+                }
+            }
+            //TODO disabled for now, since generated sources are ignored during compilation
+            tasks.getByName("classes").dependsOn(generateAdapter())
+            apply(target, shadow)
+        }
+    }
+
     //FIXME docker tend to create folders with sudo that are not deletable under original user
-    fun apply(project: Project, shadowJar: ShadowJar) {
+    private fun apply(project: Project, shadowJar: ShadowJar) {
         with(project) {
             val outputDirectory = File(buildDir, "native")
             val nativeFileName = shadowJar.archiveFile.get().asFile.nameWithoutExtension
