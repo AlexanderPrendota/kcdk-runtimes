@@ -1,13 +1,15 @@
 package com.kotlin.aws.runtime.tasks
 
-import com.kotlin.aws.runtime.runtime
+import com.kotlin.aws.runtime.dsl.runtime
 import com.kotlin.aws.runtime.utils.Groups
 import org.gradle.api.DefaultTask
+import org.gradle.api.Project
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 
+internal fun Project.generateAdapter() = tasks.create("generateAdapter", GenerateAdapter::class.java)
 
 open class GenerateAdapter : DefaultTask() {
     init {
@@ -32,31 +34,29 @@ open class GenerateAdapter : DefaultTask() {
         with(File(genDir, "com/kotlin/aws/runtime/Adapter.kt")) {
             parentFile.mkdirs()
             writeText(
-                //TODO remove ktor related parts
                 //language=kotlin
                 """
                     package com.kotlin.aws.runtime
                     
                     import $klass
+                    import com.amazonaws.services.lambda.runtime.Context
                     import com.kotlin.aws.runtime.client.LambdaHTTPClient
                     import java.io.ByteArrayOutputStream
-                    import io.ktor.server.engine.*
 
                     val server = ${klass}()
 
-                    @OptIn(EngineAPI::class)
                     object Adapter {
-                        fun handleLambdaInvocation(requestId: String, apiGatewayProxyRequest: String) {
+                        fun handleLambdaInvocation(context: Context, apiGatewayProxyRequest: String) {
                             try {
                                 val input = apiGatewayProxyRequest.byteInputStream()
                                 val output = ByteArrayOutputStream()
 
-                                server.${function}(input, output, null)
+                                server.${function}(input, output, context)
 
-                                LambdaHTTPClient.invoke(requestId, output.toByteArray())
+                                LambdaHTTPClient.invoke(context.awsRequestId, output.toByteArray())
                             } catch (t: Throwable) {
-                                t.printStackTrace()
-                                LambdaHTTPClient.postInvokeError(requestId, t.message)
+                                context.logger.log("Invocation error: " + t.message)
+                                LambdaHTTPClient.postInvokeError(context.awsRequestId, t.message)
                             }
                         }
                     }

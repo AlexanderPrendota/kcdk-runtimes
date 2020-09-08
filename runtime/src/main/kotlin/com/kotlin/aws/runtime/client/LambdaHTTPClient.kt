@@ -11,11 +11,10 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
 object LambdaHTTPClient {
+    private val httpClient = HttpClient.newHttpClient()
     //TODO better to replace with fast kotlinx.serialization
     private val mapper: ObjectMapper = jacksonObjectMapper()
         .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-    private val httpClient = HttpClient.newHttpClient()
-
 
     fun init(): HttpResponse<String> {
         val request = HttpRequest.newBuilder(URI.create(LambdaRouters.INVOKE_NEXT)).build()
@@ -42,6 +41,7 @@ object LambdaHTTPClient {
     }
 
     private fun postLambdaError(url: String, message: String?) {
+
         val request = HttpRequest
             .newBuilder(URI.create(url))
             .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(LambdaError(message))))

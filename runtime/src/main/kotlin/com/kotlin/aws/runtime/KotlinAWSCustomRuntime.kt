@@ -1,5 +1,6 @@
 package com.kotlin.aws.runtime
 
+import com.amazonaws.services.lambda.runtime.Context
 import com.kotlin.aws.runtime.LambdaEnvironment.DEADLINE_HEADER_NAME
 import com.kotlin.aws.runtime.LambdaEnvironment.INVOKED_FUNCTION_ARN
 import com.kotlin.aws.runtime.LambdaEnvironment.REQUEST_HEADER_NAME
@@ -14,18 +15,18 @@ val log: Logger = Logger.getLogger("Kotlin Custom Runtime")
 fun main() {
     log.info("Init Kotlin GraalVM Runtime.")
     while (true) {
-        initLambdaInvocation { requestId, awsLambdaInvocation ->
-            Adapter.handleLambdaInvocation(requestId, awsLambdaInvocation)
+        initLambdaInvocation { context, awsLambdaInvocation ->
+            Adapter.handleLambdaInvocation(context, awsLambdaInvocation)
         }
     }
 }
 
-private fun initLambdaInvocation(handle: (requestId: String, apiGatewayProxyRequest: String) -> Unit) {
+private fun initLambdaInvocation(handle: (context: Context, apiGatewayProxyRequest: String) -> Unit) {
     log.info("Create lambda invocation..")
     try {
-        val (requestId, apiGatewayProxyRequest) = createLambdaInvocation()
-        log.info("Get the invocation. Request ID: $requestId")
-        handle(requestId, apiGatewayProxyRequest)
+        val (context, apiGatewayProxyRequest) = createLambdaInvocation()
+        log.info("Get the invocation. Request ID: ${context.awsRequestId}")
+        handle(context, apiGatewayProxyRequest)
     } catch (t: Throwable) {
         t.printStackTrace()
         LambdaHTTPClient.postInitError(t.message)
@@ -34,25 +35,17 @@ private fun initLambdaInvocation(handle: (requestId: String, apiGatewayProxyRequ
 
 private fun createLambdaInvocation(): AwsLambdaInvocation {
     val response = LambdaHTTPClient.init()
-    val requestId = response.headers().firstValue(REQUEST_HEADER_NAME).orElse(null)
-        ?: error("Header: $REQUEST_HEADER_NAME was not found")
     val apiGatewayProxyRequest = response.body()
-    printContext(requestId, response, apiGatewayProxyRequest)
-    return AwsLambdaInvocation(requestId, apiGatewayProxyRequest)
+    val context = getContext(response)
+    return AwsLambdaInvocation(context, apiGatewayProxyRequest)
 }
 
-private fun printContext(
-    requestId: String,
-    response: HttpResponse<String>,
-    apiGatewayProxyRequest: String
-) {
+private fun getContext(response: HttpResponse<String>): LambdaContext {
+    val requestId = response.headers().firstValue(REQUEST_HEADER_NAME).orElse(null)
+        ?: error("Header: $REQUEST_HEADER_NAME was not found")
     val deadLineTime = response.headers().firstValue(DEADLINE_HEADER_NAME).orElse("0").toLong()
     val invokedFuncArn = response.headers().firstValue(INVOKED_FUNCTION_ARN).orElse(null)
-    val context = LambdaContext(requestId, deadLineTime, invokedFuncArn)
-    log.info("Response headers: ${response.headers()}")
-    log.info("Parsed body: $apiGatewayProxyRequest")
-    log.info("Response body: ${response.body()}")
-    log.info("Lambda context: $context")
+    return LambdaContext(requestId, deadLineTime, invokedFuncArn)
 }
 
 

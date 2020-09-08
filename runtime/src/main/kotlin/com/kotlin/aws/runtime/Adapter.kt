@@ -1,5 +1,6 @@
 package com.kotlin.aws.runtime
 
+import com.amazonaws.services.lambda.runtime.Context
 import com.kotlin.aws.runtime.client.LambdaHTTPClient
 import java.io.ByteArrayOutputStream
 
@@ -9,17 +10,17 @@ import java.io.ByteArrayOutputStream
  * See example in: [com.kotlin.aws.runtime.tasks.GenerateAdapter]
  */
 object Adapter {
-    fun handleLambdaInvocation(requestId: String, apiGatewayProxyRequest: String) {
+    fun handleLambdaInvocation(context: Context, apiGatewayProxyRequest: String) {
         try {
             val input = apiGatewayProxyRequest.byteInputStream()
             val output = ByteArrayOutputStream()
             // here goes call
             error("Initial Adapter should never be called")
             // here goes call
-            LambdaHTTPClient.invoke(requestId, output.toByteArray())
+            LambdaHTTPClient.invoke(context.awsRequestId, output.toByteArray())
         } catch (t: Throwable) {
-            t.printStackTrace()
-            LambdaHTTPClient.postInvokeError(requestId, t.message)
+            context.logger.log("Invocation error: " + t.message)
+            LambdaHTTPClient.postInvokeError(context.awsRequestId, t.message)
         }
     }
 }
