@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream
  * That code will be replaced on client code function.
  * See example in: [com.kotlin.aws.runtime.tasks.GenerateAdapter]
  */
+@Suppress("UNREACHABLE_CODE", "UNUSED_VARIABLE")
 object Adapter {
     fun handleLambdaInvocation(context: Context, apiGatewayProxyRequest: String) {
         try {
