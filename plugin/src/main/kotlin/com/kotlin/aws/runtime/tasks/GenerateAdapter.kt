@@ -21,17 +21,15 @@ open class GenerateAdapter : DefaultTask() {
         get() = runtime.handler
 
     @get:OutputDirectory
-    val generationPath: File?
-        get() = runtime.generationPath
+    val generationPath: File
+        get() = runtime.generationPathOrDefault(project)
 
     @TaskAction
     fun act() {
         val (klass, function) = handler?.split("::")
             ?: error("`handler` field should be set via `runtime` extension")
 
-        val genDir = generationPath ?: project.file("src/main/kotlin-gen")
-
-        with(File(genDir, "com/kotlin/aws/runtime/Adapter.kt")) {
+        with(File(generationPath, "com/kotlin/aws/runtime/Adapter.kt")) {
             parentFile.mkdirs()
             writeText(
                 //language=kotlin

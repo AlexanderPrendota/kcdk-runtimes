@@ -9,6 +9,7 @@ dependencies {
 
     implementation(gradleApi())
     implementation(gradleKotlinDsl())
+    implementation(kotlin("gradle-plugin-api"))
 
     implementation("com.github.jengelman.gradle.plugins", "shadow", "6.0.0")
 
