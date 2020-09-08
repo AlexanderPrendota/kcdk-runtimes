@@ -47,5 +47,3 @@ private fun getContext(response: HttpResponse<String>): LambdaContext {
     val invokedFuncArn = response.headers().firstValue(INVOKED_FUNCTION_ARN).orElse(null)
     return LambdaContext(requestId, deadLineTime, invokedFuncArn)
 }
-
-

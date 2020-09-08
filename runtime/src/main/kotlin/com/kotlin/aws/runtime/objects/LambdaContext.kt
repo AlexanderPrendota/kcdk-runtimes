@@ -38,4 +38,3 @@ data class LambdaContext(
      */
     override fun getClientContext(): ClientContext? = null
 }
-
