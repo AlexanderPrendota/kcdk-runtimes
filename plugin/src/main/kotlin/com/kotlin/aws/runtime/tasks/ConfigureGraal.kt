@@ -6,6 +6,7 @@ import com.bmuschko.gradle.docker.tasks.container.DockerStartContainer
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import com.kotlin.aws.runtime.utils.GraalSettings
 import com.kotlin.aws.runtime.utils.Groups
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -15,16 +16,16 @@ import shadow.org.codehaus.plexus.util.Os
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.attribute.PosixFilePermissions
+import java.util.logging.Logger
 
 
 internal object ConfigureGraal {
-    private val reflectFileName = "reflect.json"
 
     private val GRAAL_VM_FLAGS = listOf(
         "--enable-url-protocols=https",
         "-Djava.net.preferIPv4Stack=true",
         "-H:+AllowIncompleteClasspath",
-        "-H:ReflectionConfigurationFiles=/working/build/$reflectFileName",
+        "-H:ReflectionConfigurationFiles=/working/build/${GraalSettings.DEFAULT_REFLECT_FILE_NAME}",
         "-H:+ReportUnsupportedElementsAtRuntime",
         "--initialize-at-build-time=io.ktor,kotlinx,kotlin,org.apache.logging.log4j,org.apache.logging.slf4j,org.apache.log4j",
         "--no-server",
@@ -166,8 +167,8 @@ internal object ConfigureGraal {
 
     //TODO probable reflect.json should be configurable and we should have few preconfigured
     private fun generateReflect(buildDir: File): File {
-        val reflect = ConfigureGraal::class.java.getResource("/$reflectFileName").readText()
-        val file = File(buildDir, reflectFileName)
+        val reflect = ConfigureGraal::class.java.getResource("/${GraalSettings.DEFAULT_REFLECT_FILE_NAME}").readText()
+        val file = File(buildDir, GraalSettings.DEFAULT_REFLECT_FILE_NAME)
         file.parentFile.mkdirs()
         file.createNewFile()
         file.writeText(reflect)
