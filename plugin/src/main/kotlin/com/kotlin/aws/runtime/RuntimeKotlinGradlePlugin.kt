@@ -2,6 +2,7 @@
 
 package com.kotlin.aws.runtime
 
+import com.kotlin.aws.runtime.dsl.RuntimePluginExtension
 import com.kotlin.aws.runtime.dsl.runtime
 import com.kotlin.aws.runtime.tasks.*
 import com.kotlin.aws.runtime.tasks.ConfigureGraal
@@ -19,6 +20,8 @@ class RuntimeKotlinGradlePlugin : Plugin<Project> {
         with(target) {
             pluginManager.apply("com.github.johnrengelman.shadow")
             pluginManager.apply("com.bmuschko.docker-remote-api")
+
+            runtime = RuntimePluginExtension()
 
             val jar = createGraalJar()
             val shadow = createShadowJarGraal(jar)

@@ -15,11 +15,11 @@ open class GenerateAdapter : DefaultTask() {
 
     @get:Input
     val handler: String?
-        get() = runtime.handler
+        get() = project.runtime.handler
 
     @get:OutputDirectory
     val generationPath: File
-        get() = runtime.generationPathOrDefault(project)
+        get() = project.runtime.generationPathOrDefault(project)
 
     @TaskAction
     fun act() {

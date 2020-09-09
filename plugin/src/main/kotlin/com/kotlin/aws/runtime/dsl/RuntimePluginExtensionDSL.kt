@@ -34,10 +34,3 @@ class RuntimePluginExtension : Serializable {
     }
 
 }
-
-internal var runtime = RuntimePluginExtension()
-
-@RuntimeDSLTag
-fun runtime(configure: RuntimePluginExtension.() -> Unit) {
-    runtime.configure()
-}
