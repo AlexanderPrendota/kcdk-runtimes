@@ -18,11 +18,13 @@ import java.nio.file.attribute.PosixFilePermissions
 
 
 internal object ConfigureGraal {
+    private val reflectFileName = "reflect.json"
+
     private val GRAAL_VM_FLAGS = listOf(
         "--enable-url-protocols=https",
         "-Djava.net.preferIPv4Stack=true",
         "-H:+AllowIncompleteClasspath",
-        "-H:ReflectionConfigurationFiles=/working/build/reflect.json",
+        "-H:ReflectionConfigurationFiles=/working/build/$reflectFileName",
         "-H:+ReportUnsupportedElementsAtRuntime",
         "--initialize-at-build-time=io.ktor,kotlinx,kotlin,org.apache.logging.log4j,org.apache.logging.slf4j,org.apache.log4j",
         "--no-server",
@@ -164,8 +166,8 @@ internal object ConfigureGraal {
 
     //TODO probable reflect.json should be configurable and we should have few preconfigured
     private fun generateReflect(buildDir: File): File {
-        val reflect = ConfigureGraal::class.java.getResource("/reflect.json").readText()
-        val file = File(buildDir, "reflect.json")
+        val reflect = ConfigureGraal::class.java.getResource("/$reflectFileName").readText()
+        val file = File(buildDir, reflectFileName)
         file.parentFile.mkdirs()
         file.createNewFile()
         file.writeText(reflect)
