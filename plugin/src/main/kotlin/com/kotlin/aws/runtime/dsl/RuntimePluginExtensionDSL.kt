@@ -1,9 +1,9 @@
 package com.kotlin.aws.runtime.dsl
 
+import com.kotlin.aws.runtime.utils.GraalSettings
 import org.gradle.api.Project
 import java.io.File
 import java.io.Serializable
-import java.nio.file.Path
 
 @DslMarker
 annotation class RuntimeDSLTag
@@ -31,6 +31,18 @@ class RuntimePluginExtension : Serializable {
         var reflectConfiguration: String? = null
         var flags: List<String>? = null
         var image: String? = null
+
+        internal fun getFlagsOrDefault(): List<String> {
+            val projectFlags = flags
+            return if (projectFlags == null) {
+                GraalSettings.FULL_GRAAL_VM_FLAGS
+            } else {
+                projectFlags + GraalSettings.BASE_GRAAL_FLAGS
+            }
+        }
+
+        internal fun getImageOrDefault() = image ?: GraalSettings.GRAAL_VM_DOCKER_IMAGE
+
     }
 
 }

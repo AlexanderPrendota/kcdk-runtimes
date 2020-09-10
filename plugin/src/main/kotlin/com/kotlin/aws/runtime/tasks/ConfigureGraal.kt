@@ -58,14 +58,16 @@ internal object ConfigureGraal {
         val nativeFileName = file.nameWithoutExtension
         return tasks.create("createDockerfile", Dockerfile::class.java) { dockerfile ->
             generateReflect(buildDir)
-            val graalImage = getGraalVmImage()
+            val graalImage = runtime.config.getImageOrDefault()
+            logger.lifecycle("Create GraalVM native image: `$graalImage`.")
             dockerfile.group = Groups.`graal setup`
             dockerfile.from(graalImage)
             dockerfile.instruction("RUN gu install native-image")
             dockerfile.instruction("RUN mkdir -p /working/build")
             dockerfile.entryPoint("bash")
             project.afterEvaluate {
-                val flags = getGraalVmFlags()
+                val flags = runtime.config.getFlagsOrDefault().joinToString(" ")
+                logger.lifecycle("Create GraaVM native image with flags: $flags")
                 dockerfile.defaultCommand(
                     "-c",
                     """
@@ -158,23 +160,6 @@ internal object ConfigureGraal {
             """.trimIndent()
         )
         return file
-    }
-
-    private fun Project.getGraalVmImage(): String {
-        val image = runtime.config.image ?: GraalSettings.GRAAL_VM_DOCKER_IMAGE
-        logger.lifecycle("Create GraalVM native image: `$image`.")
-        return image
-    }
-
-    private fun Project.getGraalVmFlags(): String {
-        val projectFlags = runtime.config.flags
-        val flags = if (projectFlags == null) {
-            GraalSettings.FULL_GRAAL_VM_FLAGS
-        } else {
-            GraalSettings.BASE_GRAAL_FLAGS + projectFlags
-        }.joinToString(" ")
-        logger.lifecycle("Create GraaVM native image with flags: $flags")
-        return flags
     }
 
     private fun Project.generateReflect(buildDir: File): File {
