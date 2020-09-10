@@ -21,17 +21,6 @@ import java.nio.file.attribute.PosixFilePermissions
 
 internal object ConfigureGraal {
 
-    private val GRAAL_VM_FLAGS = listOf(
-        "--enable-url-protocols=https",
-        "-Djava.net.preferIPv4Stack=true",
-        "-H:+AllowIncompleteClasspath",
-        "-H:ReflectionConfigurationFiles=/working/build/${GraalSettings.DEFAULT_REFLECT_FILE_NAME}",
-        "-H:+ReportUnsupportedElementsAtRuntime",
-        "--initialize-at-build-time=io.ktor,kotlinx,kotlin,org.apache.logging.log4j,org.apache.logging.slf4j,org.apache.log4j",
-        "--no-server",
-        "-jar"
-    ).joinToString(" ")
-
     internal fun setupGraalVMTasks(project: Project, shadowJar: ShadowJar) {
         if (project.runtime.handler?.split("::")?.size != 2) {
             project.logger.warn("Kotlin GraalVM Runtime requires correct `handler`. The field should be set via `runtime` extension`.")
@@ -46,7 +35,7 @@ internal object ConfigureGraal {
             val nativeFileName = shadowJar.archiveFile.get().asFile.nameWithoutExtension
             generateReflect(buildDir)
 
-            val dockerfile = createDockerfile(GRAAL_VM_FLAGS, shadowJar.archiveFile.get().asFile)
+            val dockerfile = createDockerfile(shadowJar.archiveFile.get().asFile)
             val nativeImage = createNativeImage(dockerfile)
             val nativeContainer = createNativeContainer(nativeImage)
             val logs = createLogsContainer(nativeContainer.containerId)
@@ -66,7 +55,7 @@ internal object ConfigureGraal {
         }
     }
 
-    private fun Project.createDockerfile(graalVmFlags: String, file: File): Dockerfile {
+    private fun Project.createDockerfile(file: File): Dockerfile {
         val jarFileName = file.name
         val nativeFileName = file.nameWithoutExtension
         return tasks.create("createDockerfile", Dockerfile::class.java) { dockerfile ->
@@ -77,11 +66,12 @@ internal object ConfigureGraal {
             dockerfile.instruction("RUN mkdir -p /working/build")
             dockerfile.entryPoint("bash")
             project.afterEvaluate {
+                val flags = getGraalVmFlags()
                 dockerfile.defaultCommand(
                     "-c",
                     """
                         ls /working/build/libs; \
-                        native-image $graalVmFlags /working/build/libs/$jarFileName; \
+                        native-image $flags /working/build/libs/$jarFileName; \
                         mkdir -p /working/build/native; \
                         cp -f $nativeFileName /working/build/native/$nativeFileName; \
                         chmod -R 777 /working/build/native; \
@@ -174,11 +164,21 @@ internal object ConfigureGraal {
     private fun Project.getGraalVmImage(): String {
         val image = runtime.config.image
         if (image == null) {
-            logger.lifecycle("Create default Graal VM image: `${GraalSettings.GRAAL_VM_DOCKER_IMAGE}`")
+            logger.lifecycle("Create default GraalVM image: `${GraalSettings.GRAAL_VM_DOCKER_IMAGE}`")
             return GraalSettings.GRAAL_VM_DOCKER_IMAGE
         }
         logger.lifecycle("Create custom GraalVM image: `$image`.")
         return image
+    }
+
+    private fun Project.getGraalVmFlags(): String {
+        val flags = runtime.config.flags
+        if (flags == null) {
+            logger.lifecycle("Use default GraaVM flags for image: ${GraalSettings.DEFAULT_GRAAL_VM_FLAGS}")
+            return GraalSettings.DEFAULT_GRAAL_VM_FLAGS
+        }
+        logger.lifecycle("Use custom GraaVM flags for image: ${GraalSettings.DEFAULT_GRAAL_VM_FLAGS}")
+        return flags.joinToString(" ")
     }
 
     //TODO probable reflect.json should be configurable and we should have few preconfigured
