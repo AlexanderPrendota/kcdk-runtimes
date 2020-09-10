@@ -172,13 +172,14 @@ internal object ConfigureGraal {
     }
 
     private fun Project.getGraalVmFlags(): String {
-        val flags = runtime.config.flags
-        if (flags == null) {
-            logger.lifecycle("Use default GraaVM flags for image: ${GraalSettings.DEFAULT_GRAAL_VM_FLAGS}")
-            return GraalSettings.DEFAULT_GRAAL_VM_FLAGS
-        }
-        logger.lifecycle("Use custom GraaVM flags for image: ${GraalSettings.DEFAULT_GRAAL_VM_FLAGS}")
-        return flags.joinToString(" ")
+        val projectFlags = runtime.config.flags
+        val flags = if (projectFlags == null) {
+            GraalSettings.FULL_GRAAL_VM_FLAGS
+        } else {
+            GraalSettings.BASE_GRAAL_FLAGS + projectFlags
+        }.joinToString(" ")
+        logger.lifecycle("Create GraaVM native image with flags: $flags")
+        return flags
     }
 
     //TODO probable reflect.json should be configurable and we should have few preconfigured
