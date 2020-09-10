@@ -6,6 +6,7 @@ import com.bmuschko.gradle.docker.tasks.container.DockerStartContainer
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import com.kotlin.aws.runtime.dsl.runtime
 import com.kotlin.aws.runtime.utils.GraalSettings
 import com.kotlin.aws.runtime.utils.Groups
 import org.gradle.api.Project
@@ -16,7 +17,6 @@ import shadow.org.codehaus.plexus.util.Os
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.attribute.PosixFilePermissions
-import java.util.logging.Logger
 
 
 internal object ConfigureGraal {
@@ -32,8 +32,15 @@ internal object ConfigureGraal {
         "-jar"
     ).joinToString(" ")
 
+    internal fun setupGraalVMTasks(project: Project, shadowJar: ShadowJar) {
+        if (project.runtime.handler?.split("::")?.size != 2) {
+            project.logger.warn("Kotlin GraalVM Runtime requires correct `handler`. The field should be set via `runtime` extension`.")
+            return
+        }
+        createGraalVmRuntimeTasks(project, shadowJar)
+    }
 
-    internal fun apply(project: Project, shadowJar: ShadowJar) {
+    private fun createGraalVmRuntimeTasks(project: Project, shadowJar: ShadowJar) {
         with(project) {
             val outputDirectory = File(buildDir, "native")
             val nativeFileName = shadowJar.archiveFile.get().asFile.nameWithoutExtension
@@ -63,8 +70,9 @@ internal object ConfigureGraal {
         val jarFileName = file.name
         val nativeFileName = file.nameWithoutExtension
         return tasks.create("createDockerfile", Dockerfile::class.java) { dockerfile ->
+            val graalImage = getGraalVmImage()
             dockerfile.group = Groups.`graal setup`
-            dockerfile.from("oracle/graalvm-ce:20.1.0-java11")
+            dockerfile.from(graalImage)
             dockerfile.instruction("RUN gu install native-image")
             dockerfile.instruction("RUN mkdir -p /working/build")
             dockerfile.entryPoint("bash")
@@ -104,8 +112,6 @@ internal object ConfigureGraal {
                     .replace("C:", "//c", ignoreCase = true)
                 else -> buildDir.absolutePath
             }
-
-            println("Build directory: $buildDir")
             it.dependsOn(nativeImage)
             it.targetImageId(nativeImage.imageId)
             it.hostConfig.autoRemove.set(true)
@@ -163,6 +169,16 @@ internal object ConfigureGraal {
             """.trimIndent()
         )
         return file
+    }
+
+    private fun Project.getGraalVmImage(): String {
+        val image = runtime.config.image
+        if (image == null) {
+            logger.lifecycle("Create default Graal VM image: `${GraalSettings.GRAAL_VM_DOCKER_IMAGE}`")
+            return GraalSettings.GRAAL_VM_DOCKER_IMAGE
+        }
+        logger.lifecycle("Create custom GraalVM image: `$image`.")
+        return image
     }
 
     //TODO probable reflect.json should be configurable and we should have few preconfigured

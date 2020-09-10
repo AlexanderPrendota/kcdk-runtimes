@@ -4,8 +4,8 @@ package com.kotlin.aws.runtime
 
 import com.kotlin.aws.runtime.dsl.RuntimePluginExtension
 import com.kotlin.aws.runtime.dsl.runtime
-import com.kotlin.aws.runtime.tasks.*
 import com.kotlin.aws.runtime.tasks.ConfigureGraal
+import com.kotlin.aws.runtime.tasks.GenerateAdapter
 import com.kotlin.aws.runtime.tasks.createGraalJar
 import com.kotlin.aws.runtime.tasks.createShadowJarGraal
 import com.kotlin.aws.runtime.utils.kotlin
@@ -26,16 +26,15 @@ class RuntimeKotlinGradlePlugin : Plugin<Project> {
             val jar = createGraalJar()
             val shadow = createShadowJarGraal(jar)
 
+            val generateAdapter = tasks.create("generateAdapter", GenerateAdapter::class.java)
+            tasks.getByName("classes").dependsOn(generateAdapter)
+
             afterEvaluate {
                 target.mySourceSets.apply {
                     this["main"].kotlin.srcDir(runtime.generationPathOrDefault(target))
                 }
+                ConfigureGraal.setupGraalVMTasks(target, shadow)
             }
-
-            val generateAdapter = tasks.create("generateAdapter", GenerateAdapter::class.java)
-            tasks.getByName("classes").dependsOn(generateAdapter)
-
-            ConfigureGraal.apply(target, shadow)
         }
     }
 }
