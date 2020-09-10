@@ -33,8 +33,6 @@ internal object ConfigureGraal {
         with(project) {
             val outputDirectory = File(buildDir, "native")
             val nativeFileName = shadowJar.archiveFile.get().asFile.nameWithoutExtension
-            generateReflect(buildDir)
-
             val dockerfile = createDockerfile(shadowJar.archiveFile.get().asFile)
             val nativeImage = createNativeImage(dockerfile)
             val nativeContainer = createNativeContainer(nativeImage)
@@ -59,6 +57,7 @@ internal object ConfigureGraal {
         val jarFileName = file.name
         val nativeFileName = file.nameWithoutExtension
         return tasks.create("createDockerfile", Dockerfile::class.java) { dockerfile ->
+            generateReflect(buildDir)
             val graalImage = getGraalVmImage()
             dockerfile.group = Groups.`graal setup`
             dockerfile.from(graalImage)
@@ -178,13 +177,15 @@ internal object ConfigureGraal {
         return flags
     }
 
-    //TODO probable reflect.json should be configurable and we should have few preconfigured
-    private fun generateReflect(buildDir: File): File {
-        val reflect = ConfigureGraal::class.java.getResource("/${GraalSettings.DEFAULT_REFLECT_FILE_NAME}").readText()
+    private fun Project.generateReflect(buildDir: File): File {
+        val content = runtime.config.reflectConfiguration ?: ConfigureGraal::class.java
+            .getResource("/${GraalSettings.DEFAULT_REFLECT_FILE_NAME}")
+            .readText()
+        logger.lifecycle("Use reflect config with content: $content")
         val file = File(buildDir, GraalSettings.DEFAULT_REFLECT_FILE_NAME)
         file.parentFile.mkdirs()
         file.createNewFile()
-        file.writeText(reflect)
+        file.writeText(content)
         return file
     }
 }

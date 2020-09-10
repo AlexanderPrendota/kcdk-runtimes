@@ -28,7 +28,7 @@ class RuntimePluginExtension : Serializable {
 
     @RuntimeDSLTag
     class RuntimeConfig : Serializable {
-        var reflectConfigurationFile: Path? = null
+        var reflectConfiguration: String? = null
         var flags: List<String>? = null
         var image: String? = null
     }
