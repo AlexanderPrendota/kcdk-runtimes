@@ -162,12 +162,8 @@ internal object ConfigureGraal {
     }
 
     private fun Project.getGraalVmImage(): String {
-        val image = runtime.config.image
-        if (image == null) {
-            logger.lifecycle("Create default GraalVM image: `${GraalSettings.GRAAL_VM_DOCKER_IMAGE}`")
-            return GraalSettings.GRAAL_VM_DOCKER_IMAGE
-        }
-        logger.lifecycle("Create custom GraalVM image: `$image`.")
+        val image = runtime.config.image ?: GraalSettings.GRAAL_VM_DOCKER_IMAGE
+        logger.lifecycle("Create GraalVM native image: `$image`.")
         return image
     }
 
