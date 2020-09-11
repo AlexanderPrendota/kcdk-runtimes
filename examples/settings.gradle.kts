@@ -1,5 +1,5 @@
 rootProject.name = "examples"
-include(":ktor-site")
+include(":ktor-kotless-hello-world")
 
 pluginManagement {
     repositories {
