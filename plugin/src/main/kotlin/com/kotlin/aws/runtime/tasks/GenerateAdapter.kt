@@ -23,9 +23,12 @@ open class GenerateAdapter : DefaultTask() {
 
     @TaskAction
     fun act() {
-        val (klass, function) = handler?.split("::")
-            ?: error("`handler` field should be set via `runtime` extension")
-
+        val handler = handler?.split("::")
+        require(handler != null && handler.size == 2) {
+            "Kotlin GraalVM Runtime requires correct `handler`." +
+                    " The field should be set via `runtime` extension`."
+        }
+        val (klass, function) = handler
         with(File(generationPath, "com/kotlin/aws/runtime/Adapter.kt")) {
             parentFile.mkdirs()
             writeText(
