@@ -15,12 +15,13 @@ repositories {
 
 dependencies {
     api(kotlin("stdlib"))
-    //implementation(kotlin("stdlib-jdk8"))
 
     implementation(kotlin("stdlib-js"))
     implementation(gradleApi())
     implementation(gradleKotlinDsl())
     implementation(kotlin("gradle-plugin-api"))
+
+    runtimeOnly("org.jetbrains.kotlin.js:org.jetbrains.kotlin.js.gradle.plugin:1.4.0")
 
     api("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.0")
 }
@@ -37,10 +38,10 @@ tasks {
 gradlePlugin {
     plugins {
         create("kotlinjs-lambda") {
-            id = "com.kotlin.aws.js.js-plugin"
+            id = "com.kotlin.aws.js.plugin"
             version = "0.0.1"
             implementationClass = "com.kotlin.aws.js.runtime.RuntimeKotlinGradlePlugin"
-            displayName = "Fucking plugin"
+            displayName = "KotlinJS AWS Lambda plugin"
         }
     }
 }

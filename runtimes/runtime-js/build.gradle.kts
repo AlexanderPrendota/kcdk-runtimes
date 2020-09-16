@@ -13,8 +13,6 @@ repositories {
 
 kotlin {
     js {
-        //useCommonJs()
-        //nodejs()
         browser {
             testTask {
                 enabled = false
@@ -34,7 +32,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:1.0-M1-1.4.0-rc")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.8")
     implementation(npm("node-fetch", "2.6.0"))
-    //testImplementation("org.jetbrains.kotlin:kotlin-test-js")
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile>().configureEach {

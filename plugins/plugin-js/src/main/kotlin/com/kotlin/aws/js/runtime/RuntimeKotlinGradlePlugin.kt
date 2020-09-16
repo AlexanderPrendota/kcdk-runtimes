@@ -15,6 +15,8 @@ import java.io.File
 class RuntimeKotlinGradlePlugin: Plugin<Project> {
     override fun apply(target: Project) {
 
+        target.pluginManager.apply("org.jetbrains.kotlin.js")
+
         target.tasks.create("generateMain", GenerateMain::class.java)
         target.tasks.create("generateWebpackConfig", GenerateWebpackConfig::class.java)
         target.tasks.create("buildLambda", BuildLambda::class.java).apply {
