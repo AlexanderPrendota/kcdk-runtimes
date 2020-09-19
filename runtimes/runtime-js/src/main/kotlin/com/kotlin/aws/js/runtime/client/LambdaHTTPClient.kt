@@ -13,7 +13,7 @@ private external interface Process {
     val env: dynamic
 }
 
-object LambdaHTTPClient {
+internal object LambdaHTTPClient {
 
     //private val runtimeApiEndpoint = "http://${getEnv("AWS_LAMBDA_RUNTIME_API")}"
     private val runtimeApiEndpoint = "http://localhost:8080"

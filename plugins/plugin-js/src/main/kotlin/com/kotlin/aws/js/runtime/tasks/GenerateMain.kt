@@ -40,7 +40,7 @@ open class GenerateMain : DefaultTask() {
                         import com.kotlin.aws.js.runtime.launchRuntime
                         import com.kotlin.aws.js.runtime.objects.LambdaContext
                         
-                        suspend fun main() {
+                        fun main() {
                             launchRuntime { context: LambdaContext, request: String ->
                                 $klass().$function(context, request)
                             }

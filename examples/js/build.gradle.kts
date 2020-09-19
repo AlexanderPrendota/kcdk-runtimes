@@ -19,5 +19,4 @@ dependencies {
 
 runtime {
     handler = "com.js.sample.Handler::handler"
-    outputDir = project.buildDir.absolutePath + "/my_lambda"
 }
