@@ -1,7 +1,7 @@
 package com.kotlin.aws.js.runtime
 
 import com.kotlin.aws.js.runtime.tasks.BuildLambda
-import com.kotlin.aws.js.runtime.tasks.GenerateMain
+import com.kotlin.aws.js.runtime.tasks.GenerateRuntimeMainClass
 import com.kotlin.aws.js.runtime.tasks.GenerateWebpackConfig
 import com.kotlin.aws.js.runtime.utils.getTask
 import com.kotlin.aws.js.runtime.utils.runtime
@@ -17,7 +17,7 @@ class RuntimeKotlinGradlePlugin: Plugin<Project> {
 
         target.pluginManager.apply("org.jetbrains.kotlin.js")
 
-        target.tasks.create("generateMain", GenerateMain::class.java)
+        target.tasks.create("generateMain", GenerateRuntimeMainClass::class.java)
         target.tasks.create("generateWebpackConfig", GenerateWebpackConfig::class.java)
         target.tasks.create("buildLambda", BuildLambda::class.java).apply {
             dependsOn("assemble")

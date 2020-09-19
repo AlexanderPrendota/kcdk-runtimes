@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.4.0" //apply true
+    kotlin("jvm") version "1.4.0"
     id("java-gradle-plugin")
     `maven-publish`
 }
@@ -20,8 +20,6 @@ dependencies {
     implementation(gradleApi())
     implementation(gradleKotlinDsl())
     implementation(kotlin("gradle-plugin-api"))
-
-    runtimeOnly("org.jetbrains.kotlin.js:org.jetbrains.kotlin.js.gradle.plugin:1.4.0")
 
     api("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.0")
 }

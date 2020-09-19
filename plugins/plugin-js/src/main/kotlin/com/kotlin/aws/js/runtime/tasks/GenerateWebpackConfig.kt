@@ -1,5 +1,6 @@
 package com.kotlin.aws.js.runtime.tasks
 
+import com.kotlin.aws.js.runtime.utils.Groups
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import java.io.File
@@ -7,7 +8,7 @@ import java.io.File
 open class GenerateWebpackConfig : DefaultTask() {
 
     init {
-        group = "aws"
+        group = Groups.`aws setup`
     }
 
     @TaskAction
