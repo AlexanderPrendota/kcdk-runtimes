@@ -8,7 +8,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 
-open class GenerateRuntimeMainClass : DefaultTask() {
+open class GenerateCustomRuntimeMainClass : DefaultTask() {
 
     init {
         group = Groups.`aws setup`
@@ -30,7 +30,7 @@ open class GenerateRuntimeMainClass : DefaultTask() {
             "Kotlin JS Runtime requires correct `handler`." +
                     " The field should be set via `runtime` extension`."
         }
-        val (klass, function) = handler
+        val (_package, function) = handler
         with(File(defaultPath, "com/kotlin/aws/js/runtime/Main.kt")) {
             parentFile.mkdirs()
             writeText(
@@ -38,12 +38,11 @@ open class GenerateRuntimeMainClass : DefaultTask() {
                     """
                         package com.kotlin.aws.js.runtime
                         
-                        import com.kotlin.aws.js.runtime.launchRuntime
                         import com.kotlin.aws.js.runtime.objects.LambdaContext
                         
                         fun main() {
                             launchRuntime { context: LambdaContext, request: String ->
-                                $klass().$function(context, request)
+                                JSON.stringify($_package.$function(context, request))
                             }
                         }
                         

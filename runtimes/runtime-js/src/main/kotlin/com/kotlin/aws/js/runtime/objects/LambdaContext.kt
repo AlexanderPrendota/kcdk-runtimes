@@ -7,11 +7,11 @@ import kotlin.js.Date
 
 data class LambdaContext(
     private val requestId: String,
-    private val deadlineTime: Long,
+    private val deadlineTime: Long?,
     private val invokedFuncArn: String?,
 ) {
     fun getAwsRequestId(): String = requestId
-    fun getRemainingTimeInMillis(): Int = (Date().getTime() - deadlineTime).toInt()
+    fun getRemainingTimeInMillis(): Int? = if (deadlineTime != null) (Date().getTime() - deadlineTime).toInt() else null
     fun getInvokedFunctionArn(): String? = invokedFuncArn
     fun getLogStreamName(): String = getEnv("AWS_LAMBDA_LOG_STREAM_NAME") ?: "local"
     fun getMemoryLimitInMB(): Int = getEnv("AWS_LAMBDA_FUNCTION_MEMORY_SIZE")?.toInt() ?: 1024
