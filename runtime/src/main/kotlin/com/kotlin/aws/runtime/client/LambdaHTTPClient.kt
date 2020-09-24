@@ -1,6 +1,5 @@
 package com.kotlin.aws.runtime.client
 
-import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.kotlin.aws.runtime.LambdaRouters
@@ -15,7 +14,6 @@ object LambdaHTTPClient {
 
     //TODO better to replace with fast kotlinx.serialization
     private val mapper: ObjectMapper = jacksonObjectMapper()
-        .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
 
     fun init(): HttpResponse<String> {
         val request = HttpRequest.newBuilder(URI.create(LambdaRouters.INVOKE_NEXT)).build()
