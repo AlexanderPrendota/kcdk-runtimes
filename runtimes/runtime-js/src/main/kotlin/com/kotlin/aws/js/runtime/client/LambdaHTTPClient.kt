@@ -1,28 +1,20 @@
 package com.kotlin.aws.js.runtime.client
 
+import com.kotlin.aws.js.runtime.LambdaEnvironment
+import com.kotlin.aws.js.runtime.LambdaRouters
 import com.kotlin.aws.js.runtime.utils.fetch
 import com.kotlin.aws.js.runtime.objects.LambdaContext
-import com.kotlin.aws.js.runtime.utils.getEnv
 import org.w3c.fetch.RequestInit
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-private external val process: Process
-
-private external interface Process {
-    val env: dynamic
-}
-
 internal object LambdaHTTPClient {
 
-    //private val runtimeApiEndpoint = "http://${getEnv("AWS_LAMBDA_RUNTIME_API")}"
-    private val runtimeApiEndpoint = "http://localhost:8080"
-
-    suspend fun init(): FetchResponse = sendGet("$runtimeApiEndpoint/2018-06-01/runtime/invocation/next")
+    suspend fun init(): FetchResponse = sendGet("${LambdaRouters.RUNTIME_BASE_URL}/invocation/next")
 
     suspend fun invoke(requestId: String, response: String, type: MIME = MIME.APPLICATION_JSON) {
         sendPost(
-            "$runtimeApiEndpoint/2018-06-01/runtime/invocation/$requestId/response",
+            "${LambdaRouters.RUNTIME_BASE_URL}/invocation/$requestId/response",
             response,
             type
         )
@@ -30,7 +22,7 @@ internal object LambdaHTTPClient {
 
     suspend fun postInvokeError(requestId: String, message: String) {
         sendPost(
-            "$runtimeApiEndpoint/2018-06-01/runtime/invocation/$requestId/error",
+            "${LambdaRouters.RUNTIME_BASE_URL}/invocation/$requestId/error",
             message,
             MIME.TEXT_PLAIN
         )
@@ -43,11 +35,10 @@ internal object LambdaHTTPClient {
                 it.text().then { bodyString ->
                     continuation.resume(FetchResponse(
                         LambdaContext(
-                            headers.get("lambda-runtime-aws-request-id")!!,
-                            headers.get("lambda-runtime-deadline-ms")?.toLong() ?: 0,
-                            headers.get("lambda-runtime-invoked-function-arn")
+                            headers.get(LambdaEnvironment.REQUEST_HEADER_NAME)!!,
+                            headers.get(LambdaEnvironment.DEADLINE_HEADER_NAME)?.toLong() ?: 0,
+                            headers.get(LambdaEnvironment.INVOKED_FUNCTION_ARN)
                         ),
-                        //Json.decodeFromString(bodyString)
                         bodyString
                     ))
                 }
