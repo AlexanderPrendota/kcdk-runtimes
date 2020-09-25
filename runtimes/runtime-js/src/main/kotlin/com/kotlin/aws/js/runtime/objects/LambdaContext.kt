@@ -16,5 +16,4 @@ data class LambdaContext(
     fun getLogGroupName(): String = LambdaEnvironment.LOG_GROUP_NAME
     fun getFunctionVersion(): String = LambdaEnvironment.FUNCTION_VERSION
     fun getFunctionName(): String = LambdaEnvironment.FUNCTION_NAME
-
 }

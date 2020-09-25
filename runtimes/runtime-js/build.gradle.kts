@@ -1,6 +1,6 @@
 plugins {
     kotlin("js") version "1.4.0"
-	id("org.jetbrains.kotlin.plugin.serialization") version "1.4.0"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.4.0"
     `maven-publish`
 }
 

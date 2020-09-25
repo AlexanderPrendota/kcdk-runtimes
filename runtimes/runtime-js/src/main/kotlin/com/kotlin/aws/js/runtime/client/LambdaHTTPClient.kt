@@ -33,14 +33,16 @@ internal object LambdaHTTPClient {
             fetch(url).then {
                 val headers = it.headers
                 it.text().then { bodyString ->
-                    continuation.resume(FetchResponse(
-                        LambdaContext(
-                            headers.get(LambdaEnvironment.REQUEST_HEADER_NAME)!!,
-                            headers.get(LambdaEnvironment.DEADLINE_HEADER_NAME)?.toLong() ?: 0,
-                            headers.get(LambdaEnvironment.INVOKED_FUNCTION_ARN)
-                        ),
-                        bodyString
-                    ))
+                    continuation.resume(
+                        FetchResponse(
+                            LambdaContext(
+                                headers.get(LambdaEnvironment.REQUEST_HEADER_NAME)!!,
+                                headers.get(LambdaEnvironment.DEADLINE_HEADER_NAME)?.toLong() ?: 0,
+                                headers.get(LambdaEnvironment.INVOKED_FUNCTION_ARN)
+                            ),
+                            bodyString
+                        )
+                    )
                 }
             }
         }
@@ -63,7 +65,7 @@ internal object LambdaHTTPClient {
 
 }
 
-data class FetchResponse (
+data class FetchResponse(
     val context: LambdaContext,
     val body: String
 )

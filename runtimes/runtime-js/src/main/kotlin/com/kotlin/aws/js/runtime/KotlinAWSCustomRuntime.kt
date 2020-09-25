@@ -14,13 +14,13 @@ fun launchRuntime(handler: (context: LambdaContext, apiGatewayProxyRequest: Stri
             println("Got invocation")
             try {
                 LambdaHTTPClient.invoke(
-                        invocation.context.getAwsRequestId(),
-                        handler(invocation.context, invocation.body)
+                    invocation.context.getAwsRequestId(),
+                    handler(invocation.context, invocation.body)
                 )
             } catch (e: Exception) {
                 LambdaHTTPClient.postInvokeError(
-                        invocation.context.getAwsRequestId(),
-                        e.message ?: "Unknown handler error"
+                    invocation.context.getAwsRequestId(),
+                    e.message ?: "Unknown handler error"
                 )
             }
         }
