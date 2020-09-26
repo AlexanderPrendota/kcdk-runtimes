@@ -55,12 +55,12 @@ internal object LambdaHTTPClient {
 
 }
 
-data class FetchResponse(
+internal data class FetchResponse(
     val context: LambdaContext,
     val body: String
 )
 
-enum class MIME(val value: String) {
+internal enum class MIME(val value: String) {
     APPLICATION_JSON("application/json"),
     TEXT_PLAIN("text/plain"),
 }
