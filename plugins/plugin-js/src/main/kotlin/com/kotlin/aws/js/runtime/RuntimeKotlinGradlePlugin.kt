@@ -1,16 +1,19 @@
 package com.kotlin.aws.js.runtime
 
 import com.kotlin.aws.js.runtime.tasks.*
-import com.kotlin.aws.js.runtime.utils.getTask
 import com.kotlin.aws.js.runtime.utils.runtime
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.KotlinJsProjectExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetContainer
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDceDsl
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDistributionDsl
 import java.io.File
 
 @Suppress("unused")
 class RuntimeKotlinGradlePlugin: Plugin<Project> {
+    @ExperimentalDceDsl
+    @ExperimentalDistributionDsl
     override fun apply(target: Project) {
 
         target.pluginManager.apply("org.jetbrains.kotlin.js")
