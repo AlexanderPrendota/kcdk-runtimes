@@ -11,7 +11,6 @@ fun launchRuntime(handler: (context: LambdaContext, apiGatewayProxyRequest: Stri
     GlobalScope.launch() {
         while (true) {
             val invocation = LambdaHTTPClient.init()
-            println("Got invocation")
             try {
                 LambdaHTTPClient.invoke(
                     invocation.context.getAwsRequestId(),

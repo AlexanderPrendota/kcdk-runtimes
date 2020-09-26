@@ -7,6 +7,11 @@ internal object LambdaRouters {
     private val LOCAL_PORT = getEnv("AWS_API_GATEWAY_PORT")?.toIntOrNull() ?: 8080
     private val RUNTIME_API = getEnv("AWS_LAMBDA_RUNTIME_API") ?: "localhost:$LOCAL_PORT"
     val RUNTIME_BASE_URL = "http://$RUNTIME_API/$RUNTIME_DATE/runtime"
+    // Lambda API
+    val RUNTIME_INITIALIZE_ERROR = "$RUNTIME_BASE_URL/init/error"
+    val INVOKE_NEXT = "$RUNTIME_BASE_URL/invocation/next"
+    fun getInvocationResponse(requestId: String) = "$RUNTIME_BASE_URL/invocation/$requestId/response"
+    fun getInvocationError(requestId: String) = "$RUNTIME_BASE_URL/invocation/$requestId/error"
 }
 
 /**

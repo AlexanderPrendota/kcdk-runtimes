@@ -2,30 +2,22 @@ package com.kotlin.aws.js.runtime.client
 
 import com.kotlin.aws.js.runtime.LambdaEnvironment
 import com.kotlin.aws.js.runtime.LambdaRouters
-import com.kotlin.aws.js.runtime.utils.fetch
 import com.kotlin.aws.js.runtime.objects.LambdaContext
+import com.kotlin.aws.js.runtime.utils.fetch
 import org.w3c.fetch.RequestInit
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 internal object LambdaHTTPClient {
 
-    suspend fun init(): FetchResponse = sendGet("${LambdaRouters.RUNTIME_BASE_URL}/invocation/next")
+    suspend fun init(): FetchResponse = sendGet(LambdaRouters.INVOKE_NEXT)
 
     suspend fun invoke(requestId: String, response: String, type: MIME = MIME.APPLICATION_JSON) {
-        sendPost(
-            "${LambdaRouters.RUNTIME_BASE_URL}/invocation/$requestId/response",
-            response,
-            type
-        )
+        sendPost(LambdaRouters.getInvocationResponse(requestId), response, type)
     }
 
     suspend fun postInvokeError(requestId: String, message: String) {
-        sendPost(
-            "${LambdaRouters.RUNTIME_BASE_URL}/invocation/$requestId/error",
-            message,
-            MIME.TEXT_PLAIN
-        )
+        sendPost(LambdaRouters.getInvocationError(requestId), message, MIME.TEXT_PLAIN)
     }
 
     private suspend inline fun sendGet(url: String): FetchResponse {
@@ -55,10 +47,8 @@ internal object LambdaHTTPClient {
             body = body
         )
         return suspendCoroutine { continuation ->
-            fetch(
-                url,
-                request
-            ).then { it.text() }
+            fetch(url, request)
+                .then { it.text() }
                 .then { continuation.resume(it) }
         }
     }
