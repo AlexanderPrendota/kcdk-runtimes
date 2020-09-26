@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDistributionDsl
 import java.io.File
 
 @Suppress("unused")
-class RuntimeKotlinGradlePlugin: Plugin<Project> {
+class RuntimeKotlinGradlePlugin : Plugin<Project> {
     @ExperimentalDceDsl
     @ExperimentalDistributionDsl
     override fun apply(target: Project) {
@@ -41,12 +41,14 @@ class RuntimeKotlinGradlePlugin: Plugin<Project> {
 
         target.tasks.create("buildCustomRuntimeLambda", BuildCustomRuntimeLambda::class.java).apply {
             dependsOn("generateCustomRuntimeMainClass", "generateWebpackConfig", "assemble")
-            target.tasks.findByName("compileKotlinJs")!!.mustRunAfter("generateCustomRuntimeMainClass", "generateWebpackConfig")
+            target.tasks.findByName("compileKotlinJs")!!
+                .mustRunAfter("generateCustomRuntimeMainClass", "generateWebpackConfig")
         }
 
         target.tasks.create("buildNodeJsRuntimeLambda", BuildNodeJsRuntimeLambda::class.java).apply {
             dependsOn("generateNodeJsRuntimeHandlerWrapper", "generateWebpackConfig", "assemble")
-            target.tasks.findByName("compileKotlinJs")!!.mustRunAfter("generateNodeJsRuntimeHandlerWrapper", "generateWebpackConfig")
+            target.tasks.findByName("compileKotlinJs")!!
+                .mustRunAfter("generateNodeJsRuntimeHandlerWrapper", "generateWebpackConfig")
         }
 
 
@@ -54,7 +56,7 @@ class RuntimeKotlinGradlePlugin: Plugin<Project> {
         target.afterEvaluate {
             // tweak sourcesets-dir
             val sourceSetContainer = target.extensions.getByName("kotlin") as KotlinSourceSetContainer
-            with (sourceSetContainer.sourceSets.getByName("main").kotlin) {
+            with(sourceSetContainer.sourceSets.getByName("main").kotlin) {
                 this.setSrcDirs(this.srcDirs.plus(it.buildDir.absolutePath + "/kotlin-gen"))
             }
 
