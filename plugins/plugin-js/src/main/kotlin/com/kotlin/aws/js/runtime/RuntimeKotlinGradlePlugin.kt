@@ -26,8 +26,9 @@ class RuntimeKotlinGradlePlugin: Plugin<Project> {
                 testTask {
                     enabled = false
                 }
+                val (_, function) = target.runtime.getClassAndFunction()
                 dceTask {
-                    keep("${target.name}.${target.runtime.handler!!.split("::").last()}")
+                    keep("${target.name}.${function}")
                 }
             }
             binaries.executable()

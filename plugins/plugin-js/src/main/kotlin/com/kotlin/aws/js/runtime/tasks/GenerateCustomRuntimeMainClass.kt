@@ -25,12 +25,7 @@ open class GenerateCustomRuntimeMainClass : DefaultTask() {
 
     @TaskAction
     fun generate() {
-        val handler = extension.handler?.split("::")
-        require(handler != null && handler.size == 2) {
-            "Kotlin JS Runtime requires correct `handler`." +
-                    " The field should be set via `runtime` extension`."
-        }
-        val (_package, function) = handler
+        val (_package, function) = extension.getClassAndFunction()
         with(File(defaultPath, "com/kotlin/aws/js/runtime/Main.kt")) {
             parentFile.mkdirs()
             writeText(
