@@ -11,7 +11,7 @@ import java.io.File
 open class GenerateNodeJsRuntimeHandlerWrapper : DefaultTask() {
 
     init {
-        group = Groups.`aws setup`
+        group = Groups.`js setup`
     }
 
     @get:Input

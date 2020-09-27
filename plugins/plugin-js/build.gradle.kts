@@ -10,7 +10,6 @@ version = "0.0.1"
 repositories {
     mavenLocal()
     jcenter()
-    mavenCentral()
 }
 
 dependencies {
@@ -19,9 +18,9 @@ dependencies {
     implementation(kotlin("stdlib-js"))
     implementation(gradleApi())
     implementation(gradleKotlinDsl())
-    implementation(kotlin("gradle-plugin-api"))
+    api(kotlin("gradle-plugin-api"))
 
-    api("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.0")
+    api("org.jetbrains.kotlin", "kotlin-gradle-plugin", "1.4.0")
 }
 
 tasks {

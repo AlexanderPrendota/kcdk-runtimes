@@ -7,7 +7,7 @@ import org.gradle.api.tasks.TaskAction
 open class BuildNodeJsRuntimeLambda : DefaultTask() {
 
     init {
-        group = Groups.aws
+        group = Groups.js
     }
 
     @TaskAction

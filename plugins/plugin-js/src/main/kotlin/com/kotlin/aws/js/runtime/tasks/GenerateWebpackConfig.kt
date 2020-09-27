@@ -8,7 +8,7 @@ import java.io.File
 open class GenerateWebpackConfig : DefaultTask() {
 
     init {
-        group = Groups.`aws setup`
+        group = Groups.`js setup`
     }
 
     @TaskAction

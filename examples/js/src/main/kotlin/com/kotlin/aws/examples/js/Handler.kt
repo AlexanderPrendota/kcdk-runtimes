@@ -1,4 +1,4 @@
-package com.js.sample
+package com.kotlin.aws.examples.js
 
 import com.kotlin.aws.js.runtime.objects.LambdaContext
 

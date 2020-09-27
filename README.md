@@ -14,13 +14,13 @@ There are two options available:
 + Create NodeJS Lambda
 + Create Custom Runtime Lambda
 
-Both operations are almost transparent for you as for a user.
-The only thing you have to do here is just to write a normal Kotlin function receiving paramters related to a request, define its name in a buildscript - and that's it.
+Both operations are almost transparent from the user's perpspective.
+The only thing you have to do here is just to write a basic Kotlin function receiving parameters related to a request, define its name in a buildscript - and that's it.
 Just start `buildNodeJsRuntimeLambda` or `buildCustomRuntimeLambda` Gradle task - and your Lambda is ready for uploading to the AWS.
 
 Take a look on some example.
 
-Let's say, we want deploy such function as the AWS Lambda:
+Let's say, we want deploy such Kotlin function as the AWS Lambda function:
 
 ```kotlin
 fun handler(context: LambdaContext, request: String) = object {

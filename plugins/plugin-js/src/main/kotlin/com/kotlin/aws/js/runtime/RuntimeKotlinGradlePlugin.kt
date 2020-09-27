@@ -1,6 +1,7 @@
 package com.kotlin.aws.js.runtime
 
 import com.kotlin.aws.js.runtime.tasks.*
+import com.kotlin.aws.js.runtime.utils.createTask
 import com.kotlin.aws.js.runtime.utils.runtime
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -26,34 +27,40 @@ class RuntimeKotlinGradlePlugin : Plugin<Project> {
                 testTask {
                     enabled = false
                 }
-                val (_, function) = target.runtime.getClassAndFunction()
-                dceTask {
-                    keep("${target.name}.${function}")
-                }
             }
             binaries.executable()
         }
 
-        target.tasks.create("generateCustomRuntimeMainClass", GenerateCustomRuntimeMainClass::class.java)
-        target.tasks.create("generateNodeJsRuntimeHandlerWrapper", GenerateNodeJsRuntimeHandlerWrapper::class.java)
+        val customRuntimeMainClassTask = target.createTask(GenerateCustomRuntimeMainClass::class.java)
+        val nodeJsRuntimeMainClassTask = target.createTask(GenerateNodeJsRuntimeHandlerWrapper::class.java)
+        val webpackConfigTask = target.createTask(GenerateWebpackConfig::class.java)
 
-        target.tasks.create("generateWebpackConfig", GenerateWebpackConfig::class.java)
-
-        target.tasks.create("buildCustomRuntimeLambda", BuildCustomRuntimeLambda::class.java).apply {
-            dependsOn("generateCustomRuntimeMainClass", "generateWebpackConfig", "assemble")
+        target.createTask(BuildCustomRuntimeLambda::class.java).apply {
+            dependsOn(customRuntimeMainClassTask, webpackConfigTask, "assemble")
             target.tasks.findByName("compileKotlinJs")!!
-                .mustRunAfter("generateCustomRuntimeMainClass", "generateWebpackConfig")
+                .mustRunAfter(customRuntimeMainClassTask, webpackConfigTask)
         }
 
-        target.tasks.create("buildNodeJsRuntimeLambda", BuildNodeJsRuntimeLambda::class.java).apply {
-            dependsOn("generateNodeJsRuntimeHandlerWrapper", "generateWebpackConfig", "assemble")
+        target.createTask(BuildNodeJsRuntimeLambda::class.java).apply {
+            dependsOn(nodeJsRuntimeMainClassTask, webpackConfigTask, "assemble")
             target.tasks.findByName("compileKotlinJs")!!
-                .mustRunAfter("generateNodeJsRuntimeHandlerWrapper", "generateWebpackConfig")
+                .mustRunAfter(nodeJsRuntimeMainClassTask, webpackConfigTask)
         }
 
 
 
         target.afterEvaluate {
+            // tweak dce
+            kotlinJsProjectExtension.js {
+                browser {
+                    val (_, function) = target.runtime.getClassAndFunction()
+                    dceTask {
+                        keep("${target.name}.${function}")
+                    }
+                }
+                binaries.executable()
+            }
+
             // tweak sourcesets-dir
             val sourceSetContainer = target.extensions.getByName("kotlin") as KotlinSourceSetContainer
             with(sourceSetContainer.sourceSets.getByName("main").kotlin) {

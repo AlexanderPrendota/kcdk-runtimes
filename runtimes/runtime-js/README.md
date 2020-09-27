@@ -1,2 +1,0 @@
-# aws-lambda-kotlin-js
- 

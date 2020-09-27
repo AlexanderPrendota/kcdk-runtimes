@@ -14,7 +14,7 @@ open class BuildCustomRuntimeLambda : DefaultTask() {
     val extension: RuntimePluginExtension = project.runtime
 
     init {
-        group = Groups.aws
+        group = Groups.js
     }
 
     @TaskAction
@@ -26,8 +26,7 @@ open class BuildCustomRuntimeLambda : DefaultTask() {
         with(File(dir, "bootstrap")) {
             writeText(
                 """
-                # just a placeholder, not tested yet
-                node sample.js
+                node ${project.name}.js
             """.trimIndent()
             )
         }

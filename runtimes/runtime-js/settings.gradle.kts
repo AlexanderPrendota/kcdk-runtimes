@@ -1,2 +1,2 @@
-rootProject.name = 'kotlin-aws-js-runtime'
+rootProject.name = "kotlin-aws-js-runtime"
 
