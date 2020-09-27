@@ -20,6 +20,10 @@ internal object LambdaHTTPClient {
         sendPost(LambdaRouters.getInvocationError(requestId), message, MIME.TEXT_PLAIN)
     }
 
+    suspend fun postInitError(message: String) {
+        sendPost(LambdaRouters.RUNTIME_INITIALIZE_ERROR, message, MIME.TEXT_PLAIN)
+    }
+
     private suspend inline fun sendGet(url: String): FetchResponse {
         return suspendCoroutine { continuation ->
             fetch(url).then {

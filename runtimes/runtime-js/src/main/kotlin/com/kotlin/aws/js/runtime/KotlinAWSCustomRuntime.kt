@@ -9,19 +9,23 @@ import kotlinx.coroutines.launch
 fun launchRuntime(handler: (context: LambdaContext, apiGatewayProxyRequest: String) -> String) {
 
     GlobalScope.launch() {
-        while (true) {
-            val invocation = LambdaHTTPClient.init()
-            try {
-                LambdaHTTPClient.invoke(
-                    invocation.context.getAwsRequestId(),
-                    handler(invocation.context, invocation.body)
-                )
-            } catch (e: Exception) {
-                LambdaHTTPClient.postInvokeError(
-                    invocation.context.getAwsRequestId(),
-                    e.message ?: "Unknown handler error"
-                )
+        try {
+            while (true) {
+                val invocation = LambdaHTTPClient.init()
+                try {
+                    LambdaHTTPClient.invoke(
+                        invocation.context.getAwsRequestId(),
+                        handler(invocation.context, invocation.body)
+                    )
+                } catch (t: Throwable) {
+                    LambdaHTTPClient.postInvokeError(
+                        invocation.context.getAwsRequestId(),
+                        t.message ?: "Unknown handler error"
+                    )
+                }
             }
+        } catch (t: Throwable) {
+            LambdaHTTPClient.postInitError(t.message ?: "Unknown invocation error")
         }
     }
 
