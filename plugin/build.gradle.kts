@@ -16,8 +16,6 @@ dependencies {
     implementation("com.bmuschko", "gradle-docker-plugin", "6.6.1")
     implementation("com.github.docker-java:docker-java:3.2.5")
     implementation("com.github.docker-java:docker-java-transport-httpclient5:3.2.5")
-    implementation("javax.activation:activation:1.1.1")
-    implementation("org.ow2.asm:asm:7.3.1")
 }
 
 publishPlugin {
