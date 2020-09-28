@@ -21,14 +21,20 @@ dependencies {
 }
 
 publishPlugin {
-    id = "com.kotlin.aws.runtime"
-    displayName = "Kotlin AWS Runtime"
+    id = "io.kcdk"
+    displayName = "Kotlin Cloud Development Gradle plugin"
     implementationClass = "com.kotlin.aws.runtime.RuntimeKotlinGradlePlugin"
     version = project.version.toString()
+    info {
+        description = "Kotlin Cloud Development Kit plugin for AWS"
+        website = "https://github.com/AlexanderPrendota/kotlin-aws-lambda-custom-runtimes"
+        vcsUrl = "https://github.com/AlexanderPrendota/kotlin-aws-lambda-custom-runtimes"
+        tags.addAll(listOf("kotlin", "aws", "runtime", "graalvm"))
+    }
 }
 
 publishJar {
     publication {
-        artifactId = "com.kotlin.aws.runtime.gradle.plugin"
+        artifactId = "io.kcdk.gradle.plugin"
     }
 }

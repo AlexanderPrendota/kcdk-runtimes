@@ -25,4 +25,14 @@ jar("jar") {
 }
 
 publishJar {
+    bintray {
+        username = "AlexanderPrendota"
+        repository = "io.kcdk.runtime"
+        info {
+            description = "Kotlin AWS Custom runtime for GraalVM"
+            githubRepo = "AlexanderPrendota/kotlin-aws-lambda-custom-runtimes"
+            vcsUrl = "https://github.com/AlexanderPrendota/kotlin-aws-lambda-custom-runtimes"
+            labels.addAll(listOf("kotlin", "graalvm", "aws", "runtime"))
+        }
+    }
 }

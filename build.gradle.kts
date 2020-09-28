@@ -46,5 +46,10 @@ subprojects {
             }
         }
     }
+
+    afterEvaluate {
+        System.setProperty("gradle.publish.key", System.getenv("gradle_publish_key") ?: "")
+        System.setProperty("gradle.publish.secret", System.getenv("gradle_publish_secret") ?: "")
+    }
 }
 
