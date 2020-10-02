@@ -26,7 +26,7 @@ jar("jar") {
 
 publishJar {
     bintray {
-        username = "AlexanderPrendota"
+        username = "alexanderprendota"
         repository = "io.kcdk.runtime"
         info {
             description = "Kotlin AWS Custom runtime for GraalVM"
