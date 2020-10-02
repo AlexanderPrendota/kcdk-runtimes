@@ -22,7 +22,7 @@ plugins {
 }
 ```
 
-Secondly, add Kotless DSL (or Ktor, or Spring Boot) as a library to your application:
+Secondly, add `com.kotlin.aws.runtime` as a library to your application:
 
 ```diff
 repositories {
