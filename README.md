@@ -68,6 +68,11 @@ $ ./gradlew buildGraalRuntime
 
 Take your zip archive in build/distributions and deploy it to AWS.
 
+
+## Use KotlinJS for lambdas
+
+_(WIP)_
+
 ## Examples
 
 Any explanation becomes much better with a proper example.
