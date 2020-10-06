@@ -46,7 +46,7 @@ runtime {
     handles = "com.aws.example.Handler::handleRequest"
 }
 ```
-Also, you can configure `reflect.json` of GraalVM flags via DSL.
+Also, you can configure `reflect.json`, native image and etc via DSL.
 
 And that's the whole setup!
 
