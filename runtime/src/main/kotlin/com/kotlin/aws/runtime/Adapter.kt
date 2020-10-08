@@ -21,6 +21,7 @@ object Adapter {
             LambdaHTTPClient.invoke(context.awsRequestId, output.toByteArray())
         } catch (t: Throwable) {
             context.logger.log("Invocation error: " + t.message)
+            t.printStackTrace()
             LambdaHTTPClient.postInvokeError(context.awsRequestId, t.message)
         }
     }
