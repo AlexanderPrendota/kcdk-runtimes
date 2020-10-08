@@ -1,7 +1,7 @@
 import com.kotlin.aws.runtime.dsl.runtime
 
 plugins {
-  id("com.kotlin.aws.runtime") version "0.1.0" apply true
+  id("io.kcdk") version "0.1.0" apply true
 }
 
 group = rootProject.group
