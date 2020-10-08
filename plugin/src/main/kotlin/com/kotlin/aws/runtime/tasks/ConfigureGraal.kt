@@ -166,7 +166,6 @@ internal object ConfigureGraal {
         val content = runtime.config.reflectConfiguration ?: ConfigureGraal::class.java
             .getResource("/${GraalSettings.DEFAULT_REFLECT_FILE_NAME}")
             .readText()
-        logger.lifecycle("Use reflect config with content: $content")
         val file = File(buildDir, GraalSettings.DEFAULT_REFLECT_FILE_NAME)
         file.parentFile.mkdirs()
         file.createNewFile()
