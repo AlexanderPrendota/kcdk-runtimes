@@ -13,8 +13,8 @@ Right now, KCDK  runtimes include:
 
 ### Use Kotlin with GraalVM
 
-Basically, if you already use Gradle, you only need to do two things.
-Firstly, set up `com.kotlin.aws.runtime` Gradle plugin. You need to apply the plugin:
+If you already use Gradle, you only need to do two things.
+First, set up the `io.kcdk` Gradle plugin. You'll need to apply the plugin:
 
 ```diff
 plugins {
@@ -22,7 +22,7 @@ plugins {
 }
 ```
 
-Secondly, add `com.kotlin.aws.runtime` as a library to your application:
+Second, add KCDK to your application as a library:
 
 ```diff
 repositories {
@@ -34,9 +34,9 @@ dependencies {
 }
 ```
 
-This gives you access to DSL to configure a GraalVM environment.
+This gives you access to the DSL to configure a GraalVM environment.
 
-Set up your handler class like in example below:
+Set up your handler class as shown in the example below:
 
 ```kotlin
 import com.kotlin.aws.runtime.dsl.runtime
@@ -46,11 +46,11 @@ runtime {
     handles = "com.aws.example.Handler::handleRequest"
 }
 ```
-Also, you can configure `reflect.json`, native image and etc via DSL.
+You can also configure `reflect.json`, native image, etc. via DSL.
 
 And that's the whole setup!
 
-Now you can create you first function:
+Now you can create your first function:
 
 ```kotlin
 class Handler {
@@ -60,13 +60,13 @@ class Handler {
 }
 ```
 
-Build one via:
+Build it via:
 
 ```shell script
 $ ./gradlew buildGraalRuntime
 ```
 
-Take your zip archive in build/distributions and deploy it to AWS.
+Next, take your zip archive from `build/distributions` and deploy it to AWS.
 
 
 ## Use KotlinJS for lambdas
