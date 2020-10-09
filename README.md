@@ -18,7 +18,7 @@ Firstly, set up `com.kotlin.aws.runtime` Gradle plugin. You need to apply the pl
 
 ```diff
 plugins {
-+  id("io.kcdk") version "0.1.0" apply true
++  id("io.kcdk") version "0.1.1" apply true
 }
 ```
 
@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-+  implementation("com.kotlin.aws.runtime", "runtime", "0.1.0")
++  implementation("com.kotlin.aws.runtime", "runtime", "0.1.1")
 }
 ```
 
