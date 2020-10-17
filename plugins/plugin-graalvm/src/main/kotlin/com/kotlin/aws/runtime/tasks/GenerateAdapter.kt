@@ -39,11 +39,13 @@ open class GenerateAdapter : DefaultTask() {
                     import $klass
                     import com.amazonaws.services.lambda.runtime.Context
                     import com.kotlin.aws.runtime.client.LambdaHTTPClient
+                    import org.slf4j.LoggerFactory
                     import java.io.ByteArrayOutputStream
 
                     val server = ${klass}()
 
                     object Adapter {
+                        private val log = LoggerFactory.getLogger(Adapter::class.java)
                         fun handleLambdaInvocation(context: Context, apiGatewayProxyRequest: String) {
                             try {
                                 val input = apiGatewayProxyRequest.byteInputStream()
@@ -53,7 +55,7 @@ open class GenerateAdapter : DefaultTask() {
 
                                 LambdaHTTPClient.invoke(context.awsRequestId, output.toByteArray())
                             } catch (t: Throwable) {
-                                context.logger.log("Invocation error: " + t.message)
+                                log.error("Invocation error: ", t)
                                 LambdaHTTPClient.postInvokeError(context.awsRequestId, t.message)
                             }
                         }

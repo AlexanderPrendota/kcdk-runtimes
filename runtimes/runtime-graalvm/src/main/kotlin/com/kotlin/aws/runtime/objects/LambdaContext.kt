@@ -22,8 +22,8 @@ data class LambdaContext(
     override fun getRemainingTimeInMillis(): Int = (Date().time - deadlineTime).toInt()
 
     override fun getLogger(): LambdaLogger = object : LambdaLogger {
-        override fun log(message: String?) = logger.log(message)
-        override fun log(message: ByteArray?) = logger.log(message)
+        override fun log(message: String?) = println(message)
+        override fun log(message: ByteArray?) = println(message)
     }
 
     /**

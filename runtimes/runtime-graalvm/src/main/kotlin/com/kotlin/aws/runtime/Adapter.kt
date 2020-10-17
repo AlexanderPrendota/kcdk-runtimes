@@ -2,6 +2,7 @@ package com.kotlin.aws.runtime
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.kotlin.aws.runtime.client.LambdaHTTPClient
+import org.slf4j.LoggerFactory
 import java.io.ByteArrayOutputStream
 
 /**
@@ -11,6 +12,9 @@ import java.io.ByteArrayOutputStream
  */
 @Suppress("UNREACHABLE_CODE", "UNUSED_VARIABLE")
 object Adapter {
+
+    private val log = LoggerFactory.getLogger(Adapter::class.java)
+
     fun handleLambdaInvocation(context: Context, apiGatewayProxyRequest: String) {
         try {
             val input = apiGatewayProxyRequest.byteInputStream()
@@ -20,7 +24,7 @@ object Adapter {
             // here goes call
             LambdaHTTPClient.invoke(context.awsRequestId, output.toByteArray())
         } catch (t: Throwable) {
-            context.logger.log("Invocation error: " + t.message)
+            log.error("Invocation error", t)
             LambdaHTTPClient.postInvokeError(context.awsRequestId, t.message)
         }
     }
