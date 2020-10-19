@@ -1,4 +1,4 @@
-package com.kotlin.aws.js.runtime.utils
+package com.kotlin.aws.js.plugin.utils
 
 object Groups {
     const val js = "js"

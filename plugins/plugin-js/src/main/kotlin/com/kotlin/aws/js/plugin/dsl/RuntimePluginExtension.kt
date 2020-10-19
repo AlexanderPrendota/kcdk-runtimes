@@ -1,4 +1,4 @@
-package com.kotlin.aws.js.runtime.dsl
+package com.kotlin.aws.js.plugin.dsl
 
 @RuntimeDSLTag
 open class RuntimePluginExtension {

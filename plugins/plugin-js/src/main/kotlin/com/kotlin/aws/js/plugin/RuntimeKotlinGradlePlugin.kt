@@ -1,8 +1,8 @@
-package com.kotlin.aws.js.runtime
+package com.kotlin.aws.js.plugin
 
-import com.kotlin.aws.js.runtime.tasks.*
-import com.kotlin.aws.js.runtime.utils.createTask
-import com.kotlin.aws.js.runtime.utils.runtime
+import com.kotlin.aws.js.plugin.tasks.*
+import com.kotlin.aws.js.plugin.utils.createTask
+import com.kotlin.aws.js.plugin.utils.runtime
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.KotlinJsProjectExtension

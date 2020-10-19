@@ -1,6 +1,6 @@
-package com.kotlin.aws.js.runtime.tasks
+package com.kotlin.aws.js.plugin.tasks
 
-import com.kotlin.aws.js.runtime.utils.Groups
+import com.kotlin.aws.js.plugin.utils.Groups
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 

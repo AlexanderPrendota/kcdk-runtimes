@@ -1,8 +1,8 @@
-package com.kotlin.aws.js.runtime.tasks
+package com.kotlin.aws.js.plugin.tasks
 
-import com.kotlin.aws.js.runtime.dsl.RuntimePluginExtension
-import com.kotlin.aws.js.runtime.utils.Groups
-import com.kotlin.aws.js.runtime.utils.runtime
+import com.kotlin.aws.js.plugin.dsl.RuntimePluginExtension
+import com.kotlin.aws.js.plugin.utils.Groups
+import com.kotlin.aws.js.plugin.utils.runtime
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
@@ -27,7 +27,7 @@ open class GenerateCustomRuntimeMainClass : DefaultTask() {
     @TaskAction
     fun generate() {
         val (_package, function) = extension.getClassAndFunction()
-        with(File(defaultPath, "com/kotlin/aws/js/runtime/Main.kt")) {
+        with(File(defaultPath, "com/kotlin/aws/js/plugin/Main.kt")) {
             parentFile.mkdirs()
             writeText(
                     // language=kotlin

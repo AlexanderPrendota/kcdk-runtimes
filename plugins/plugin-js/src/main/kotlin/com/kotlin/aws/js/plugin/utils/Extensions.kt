@@ -1,6 +1,6 @@
-package com.kotlin.aws.js.runtime.utils
+package com.kotlin.aws.js.plugin.utils
 
-import com.kotlin.aws.js.runtime.dsl.RuntimePluginExtension
+import com.kotlin.aws.js.plugin.dsl.RuntimePluginExtension
 import org.gradle.api.Project
 import org.gradle.api.Task
 
