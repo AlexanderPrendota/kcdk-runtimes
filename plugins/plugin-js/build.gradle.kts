@@ -44,7 +44,7 @@ publishJar {
 publishPlugin {
     id = "io.kcdk.js"
     displayName = "Kotlin Cloud Development Gradle plugin"
-    implementationClass = "com.kotlin.aws.js.runtime.RuntimeKotlinGradlePlugin"
+    implementationClass = "com.kotlin.aws.js.plugin.RuntimeKotlinGradlePlugin"
     version = project.version.toString()
     info {
         description = "Kotlin Cloud Development Kit plugin for AWS"

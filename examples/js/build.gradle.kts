@@ -2,7 +2,7 @@ plugins {
     id("io.kcdk.js") version "0.0.1" apply true
 }
 
-group = "com.kotlin.aws.examples.js"
+group = "io.kcdk.js.examples.js"
 version = "1.0-SNAPSHOT"
 
 repositories {
