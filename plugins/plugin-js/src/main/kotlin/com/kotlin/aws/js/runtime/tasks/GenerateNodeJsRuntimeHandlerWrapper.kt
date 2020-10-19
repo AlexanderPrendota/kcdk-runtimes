@@ -12,6 +12,7 @@ open class GenerateNodeJsRuntimeHandlerWrapper : DefaultTask() {
 
     init {
         group = Groups.`js setup`
+        description = "Generate a wrapper-function for calling your Lambda"
     }
 
     @get:Input

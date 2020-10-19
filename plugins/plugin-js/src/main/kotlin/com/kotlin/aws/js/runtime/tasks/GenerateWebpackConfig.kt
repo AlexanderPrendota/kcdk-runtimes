@@ -9,6 +9,7 @@ open class GenerateWebpackConfig : DefaultTask() {
 
     init {
         group = Groups.`js setup`
+        description = "Generate a configuration file for the Webpack in order to compile for NodeJS as a target"
     }
 
     @TaskAction

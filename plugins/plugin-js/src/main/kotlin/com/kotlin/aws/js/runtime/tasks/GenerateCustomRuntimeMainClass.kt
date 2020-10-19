@@ -12,6 +12,7 @@ open class GenerateCustomRuntimeMainClass : DefaultTask() {
 
     init {
         group = Groups.`js setup`
+        description = "Generate an entry-point for launching your Lambda"
     }
 
     @get:Input

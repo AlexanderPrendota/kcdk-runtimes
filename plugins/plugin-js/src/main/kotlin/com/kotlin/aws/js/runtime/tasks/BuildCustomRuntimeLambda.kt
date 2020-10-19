@@ -15,6 +15,7 @@ open class BuildCustomRuntimeLambda : DefaultTask() {
 
     init {
         group = Groups.js
+        description = "Generate bootstrap file and build executable JS file with your Lambda"
     }
 
     @TaskAction
@@ -24,11 +25,9 @@ open class BuildCustomRuntimeLambda : DefaultTask() {
 
         dir.mkdirs()
         with(File(dir, "bootstrap")) {
-            writeText(
-                """
+            writeText("""
                 node ${project.name}.js
-            """.trimIndent()
-            )
+            """.trimIndent())
         }
     }
 

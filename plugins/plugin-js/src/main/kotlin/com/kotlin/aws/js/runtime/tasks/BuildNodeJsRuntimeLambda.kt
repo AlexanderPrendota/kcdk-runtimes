@@ -8,6 +8,7 @@ open class BuildNodeJsRuntimeLambda : DefaultTask() {
 
     init {
         group = Groups.js
+        description = "Build executable JS file with your Lambda"
     }
 
     @TaskAction
