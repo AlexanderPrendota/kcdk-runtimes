@@ -8,4 +8,5 @@ fun handler(context: LambdaContext, request: String) = object {
     val requestId = context.getAwsRequestId()
     val requestBody = request
     val requestLength = request.length
+    val requestIsNumber = isNumber(request)
 }
