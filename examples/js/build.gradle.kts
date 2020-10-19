@@ -1,5 +1,5 @@
 plugins {
-    id("com.kotlin.aws.js.plugin") version "0.0.1" apply true
+    id("io.kcdk.js") version "0.0.1" apply true
 }
 
 group = "com.kotlin.aws.examples.js"

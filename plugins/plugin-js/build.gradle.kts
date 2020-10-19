@@ -1,10 +1,13 @@
+import tanvd.kosogor.proxy.publishJar
+import tanvd.kosogor.proxy.publishPlugin
+
 plugins {
     kotlin("jvm") version "1.4.0"
     id("java-gradle-plugin")
-    `maven-publish`
+    id("tanvd.kosogor") version "1.0.9" apply true
 }
 
-group = "com.kotlin.aws.js"
+group = "io.kcdk.js"
 version = "0.0.1"
 
 repositories {
@@ -32,24 +35,21 @@ tasks {
     }
 }
 
-gradlePlugin {
-    plugins {
-        create("kotlinjs-lambda") {
-            id = "com.kotlin.aws.js.plugin"
-            version = "0.0.1"
-            implementationClass = "com.kotlin.aws.js.runtime.RuntimeKotlinGradlePlugin"
-            displayName = "KotlinJS AWS Lambda plugin"
-        }
+publishJar {
+    publication {
+        artifactId = "io.kcdk.js.gradle.plugin"
     }
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("default") {
-            from(components["kotlin"])
-        }
-    }
-    repositories {
-        mavenLocal()
+publishPlugin {
+    id = "io.kcdk.js"
+    displayName = "Kotlin Cloud Development Gradle plugin"
+    implementationClass = "com.kotlin.aws.js.runtime.RuntimeKotlinGradlePlugin"
+    version = project.version.toString()
+    info {
+        description = "Kotlin Cloud Development Kit plugin for AWS"
+        website = "https://github.com/AlexanderPrendota/kotlin-aws-lambda-custom-runtimes"
+        vcsUrl = "https://github.com/AlexanderPrendota/kotlin-aws-lambda-custom-runtimes"
+        tags.addAll(listOf("kotlin", "aws", "runtime", "js"))
     }
 }
