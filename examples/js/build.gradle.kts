@@ -11,7 +11,6 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-js"))
     implementation("com.kotlin.aws.js.runtime", "kotlin-aws-js-runtime", "0.0.1")
     implementation(npm("is-number", "7.0.0"))
 }

@@ -1,7 +1,6 @@
 plugins {
     kotlin("js") version "1.4.0"
     id("com.jfrog.bintray") version "1.8.5"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.4.0"
     `maven-publish`
 }
 
@@ -30,7 +29,6 @@ kotlin {
 
 dependencies {
     implementation("org.jetbrains.kotlin", "kotlin-stdlib-js")
-    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-runtime-js", "1.0-M1-1.4.0-rc")
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core-js", "1.3.8")
     implementation(npm("node-fetch", "2.6.0"))
 }
