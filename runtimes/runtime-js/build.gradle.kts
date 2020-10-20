@@ -1,5 +1,6 @@
 plugins {
     kotlin("js") version "1.4.0"
+    id("com.jfrog.bintray") version "1.8.5"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.4.0"
     `maven-publish`
 }
@@ -48,5 +49,23 @@ publishing {
     }
     repositories {
         mavenLocal()
+    }
+}
+
+if (hasProperty("bintrayApiKey")) {
+    bintray {
+        user = "alexanderprendota"
+        key = project.findProperty("bintrayApiKey").toString()
+        publish = true
+        setPublications("maven-publish")
+        pkg.apply {
+            repo = "io.kcdk"
+            name = "runtime.js"
+            setLicenses("Apache-2.0")
+            vcsUrl = "https://github.com/AlexanderPrendota/kcdk-runtimes"
+            version.apply {
+                name = project.version.toString()
+            }
+        }
     }
 }
