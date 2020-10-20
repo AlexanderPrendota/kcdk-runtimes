@@ -21,7 +21,7 @@ dependencies {
     implementation(kotlin("stdlib-js"))
     implementation(gradleApi())
     implementation(gradleKotlinDsl())
-    api(kotlin("gradle-plugin-api"))
+    implementation(kotlin("gradle-plugin-api"))
 
     api("org.jetbrains.kotlin", "kotlin-gradle-plugin", "1.4.0")
 }
