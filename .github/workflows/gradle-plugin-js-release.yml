@@ -1,5 +1,5 @@
 
-name: Gradle Release
+name: Gradle Release Plugin for JS
 
 on: [ workflow_dispatch ]
 
