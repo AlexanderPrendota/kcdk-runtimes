@@ -12,7 +12,7 @@ dependencies {
     implementation(gradleKotlinDsl())
     implementation(kotlin("gradle-plugin-api"))
 
-    api("org.jetbrains.kotlin", "kotlin-gradle-plugin", "1.3.72")
+    api("org.jetbrains.kotlin", "kotlin-gradle-plugin", "1.4.0")
 }
 
 publishJar {
