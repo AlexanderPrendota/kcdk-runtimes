@@ -1,19 +1,8 @@
 import tanvd.kosogor.proxy.publishJar
 import tanvd.kosogor.proxy.publishPlugin
 
-plugins {
-    kotlin("jvm") version "1.4.0"
-    id("java-gradle-plugin")
-    id("tanvd.kosogor") version "1.0.9" apply true
-}
-
-group = "io.kcdk.js"
-version = "0.0.1"
-
-repositories {
-    mavenLocal()
-    jcenter()
-}
+group = rootProject.group
+version = rootProject.version
 
 dependencies {
     api(kotlin("stdlib"))
@@ -23,16 +12,7 @@ dependencies {
     implementation(gradleKotlinDsl())
     implementation(kotlin("gradle-plugin-api"))
 
-    api("org.jetbrains.kotlin", "kotlin-gradle-plugin", "1.4.0")
-}
-
-tasks {
-    compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
-    }
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
-    }
+    api("org.jetbrains.kotlin", "kotlin-gradle-plugin", "1.3.72")
 }
 
 publishJar {
