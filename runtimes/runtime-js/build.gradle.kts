@@ -41,7 +41,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile>().configureEa
 
 publishing {
     publications {
-        create<MavenPublication>("default") {
+        create<MavenPublication>("maven-publish") {
             from(components["kotlin"])
         }
     }
@@ -52,7 +52,7 @@ publishing {
 
 bintray {
     user = "alexanderprendota"
-    key = System.getenv("bintrayApiKey").toString()
+    key = "51a8dfff8c2e01fe674facaaff6946b360f9d90e"
     publish = true
     setPublications("maven-publish")
     pkg.apply {
