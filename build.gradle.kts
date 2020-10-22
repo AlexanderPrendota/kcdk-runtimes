@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 
 group = "com.kotlin.aws.runtime"
-version = "0.1.1"
+version = "0.1.2"
 
 val jarFileName: String = "${rootProject.name}-$version-all.jar"
 
