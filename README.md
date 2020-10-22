@@ -69,7 +69,7 @@ $ ./gradlew buildGraalRuntime
 Next, take your zip archive from `build/distributions` and deploy it to AWS.
 
 
-## Use KotlinJS for lambdas
+### Use KotlinJS for lambdas
 
 Now it's possible to create the AWS Lambda function from your Kotlin JS application.
 There are two options available:
