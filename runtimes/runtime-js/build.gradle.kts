@@ -58,7 +58,7 @@ if (hasProperty("bintrayApiKey")) {
         setPublications("maven-publish")
         pkg.apply {
             repo = "io.kcdk"
-            name = "runtime.js"
+            name = "runtime-js"
             setLicenses("Apache-2.0")
             vcsUrl = "https://github.com/AlexanderPrendota/kcdk-runtimes"
             version.apply {
