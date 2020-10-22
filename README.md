@@ -81,9 +81,23 @@ Both operations are almost transparent from the user's perspective.
 The only thing you have to do here is just to write a basic Kotlin function receiving parameters related to a request, define its name in a buildscript - and that's it.
 Just start `buildNodeJsRuntimeLambda` or `buildCustomRuntimeLambda` Gradle task - and your Lambda is ready for uploading to the AWS.
 
-Take a look on some example.
+Let's see how it looks.
 
-Let's say, we want deploy such Kotlin function as the AWS Lambda function:
+If you already use Gradle, you only need to do two things.
+
+First, set up the `io.kcdk.js` Gradle plugin. You'll need to apply the plugin:
+
+```diff
+plugins { 
++    id("io.kcdk.js") version "0.1.2" apply true
+}
+```
+
+This gives you access to the DSL to configure a lambda environment.
+
+And that's it! There is nothing else to it. All the Kotlin JS configuration will work out of the box. (also, feel free to add JavaScript libraries from npm).
+
+Let's create the first function:
 
 ```kotlin
 fun handler(context: LambdaContext, request: String) = object {
