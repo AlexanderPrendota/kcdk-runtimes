@@ -128,3 +128,4 @@ In the repository's [examples](https://github.com/AlexanderPrendota/kotlin-aws-l
 
 + [`aws-hello-world`](https://github.com/AlexanderPrendota/kotlin-aws-lambda-custom-runtimes/tree/master/examples/aws-hello-world) - simple example how to use KCDK runtimes for GraalVM.
 + [`ktor-kotless-hello-world`](https://github.com/AlexanderPrendota/kotlin-aws-lambda-custom-runtimes/tree/master/examples/ktor-kotless-hello-world) - the example how to use [Kotless](https://github.com/JetBrains/kotless) framework with Ktor-DSL and build your project as native image with GraalVM. 
++ [`hello-word-js-aws`](https://github.com/AlexanderPrendota/kcdk-runtimes/tree/master/examples/js) - simple example how to use KDCK runtime for JS.
