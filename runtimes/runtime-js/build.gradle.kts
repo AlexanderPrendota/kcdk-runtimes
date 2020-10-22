@@ -50,20 +50,18 @@ publishing {
     }
 }
 
-if (hasProperty("bintrayApiKey")) {
-    bintray {
-        user = "alexanderprendota"
-        key = project.findProperty("bintrayApiKey").toString()
-        publish = true
-        setPublications("maven-publish")
-        pkg.apply {
-            repo = "io.kcdk"
-            name = "runtime-js"
-            setLicenses("Apache-2.0")
-            vcsUrl = "https://github.com/AlexanderPrendota/kcdk-runtimes"
-            version.apply {
-                name = project.version.toString()
-            }
+bintray {
+    user = "alexanderprendota"
+    key = System.getenv("bintrayApiKey").toString()
+    publish = true
+    setPublications("maven-publish")
+    pkg.apply {
+        repo = "io.kcdk"
+        name = "runtime-js"
+        setLicenses("Apache-2.0")
+        vcsUrl = "https://github.com/AlexanderPrendota/kcdk-runtimes"
+        version.apply {
+            name = project.version.toString()
         }
     }
 }
