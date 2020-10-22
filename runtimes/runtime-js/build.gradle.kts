@@ -50,10 +50,10 @@ publishing {
     }
 }
 
-if (hasProperty("bintrayApiKey")) {
+if (hasProperty("bintrayKey")) {
     bintray {
         user = "alexanderprendota"
-        key = project.findProperty("bintrayApiKey").toString()
+        key = project.findProperty("bintrayKey").toString()
         publish = true
         setPublications("maven-publish")
         pkg.apply {
