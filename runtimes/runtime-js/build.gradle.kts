@@ -4,8 +4,8 @@ plugins {
     `maven-publish`
 }
 
-group = "com.kotlin.aws.js.runtime"
-version = "0.0.1"
+group = rootProject.group
+version = rootProject.version
 
 repositories {
     mavenCentral()
