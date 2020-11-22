@@ -13,7 +13,6 @@ plugins {
 
 subprojects {
     apply {
-        plugin("kotlin")
         plugin("tanvd.kosogor")
         plugin("io.gitlab.arturbosch.detekt")
     }

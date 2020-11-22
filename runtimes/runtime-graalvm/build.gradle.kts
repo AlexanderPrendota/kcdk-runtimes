@@ -1,9 +1,12 @@
 import tanvd.kosogor.accessors.jar
 import tanvd.kosogor.proxy.publishJar
 
+plugins {
+    kotlin("jvm")
+}
+
 group = rootProject.group
 version = rootProject.version
-
 
 dependencies {
     api(kotlin("stdlib"))
