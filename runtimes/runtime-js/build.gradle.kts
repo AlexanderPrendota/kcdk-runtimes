@@ -1,6 +1,6 @@
 plugins {
-    kotlin("js") version "1.4.0"
-    id("com.jfrog.bintray") version "1.8.5"
+    kotlin("js")
+    id("com.jfrog.bintray")
     `maven-publish`
 }
 

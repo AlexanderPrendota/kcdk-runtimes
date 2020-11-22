@@ -3,6 +3,7 @@ import tanvd.kosogor.proxy.publishPlugin
 
 plugins {
     kotlin("jvm")
+    id("tanvd.kosogor")
 }
 
 group = rootProject.group
