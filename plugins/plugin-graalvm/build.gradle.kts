@@ -1,6 +1,11 @@
 import tanvd.kosogor.proxy.publishJar
 import tanvd.kosogor.proxy.publishPlugin
 
+plugins {
+    kotlin("jvm")
+    id("tanvd.kosogor")
+}
+
 group = rootProject.group
 version = rootProject.version
 

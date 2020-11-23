@@ -1,11 +1,11 @@
 plugins {
-    kotlin("js") version "1.4.0"
-    id("com.jfrog.bintray") version "1.8.5"
+    kotlin("js")
+    id("com.jfrog.bintray")
     `maven-publish`
 }
 
-group = "com.kotlin.aws.js.runtime"
-version = "0.0.1"
+group = rootProject.group
+version = rootProject.version
 
 repositories {
     mavenCentral()

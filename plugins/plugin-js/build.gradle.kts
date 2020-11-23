@@ -1,6 +1,11 @@
 import tanvd.kosogor.proxy.publishJar
 import tanvd.kosogor.proxy.publishPlugin
 
+plugins {
+    kotlin("jvm")
+    id("tanvd.kosogor")
+}
+
 group = rootProject.group
 version = rootProject.version
 
@@ -12,7 +17,7 @@ dependencies {
     implementation(gradleKotlinDsl())
     implementation(kotlin("gradle-plugin-api"))
 
-    api("org.jetbrains.kotlin", "kotlin-gradle-plugin", "1.4.0")
+    api("org.jetbrains.kotlin", "kotlin-gradle-plugin")
 }
 
 publishJar {
