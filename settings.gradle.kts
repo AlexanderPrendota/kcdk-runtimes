@@ -16,6 +16,7 @@ pluginManagement {
 
 include(":runtimes:runtime-graalvm")
 include(":runtimes:runtime-js")
+include(":runtimes:runtime-native")
 
 include(":plugins:plugin-graalvm")
 include(":plugins:plugin-js")
