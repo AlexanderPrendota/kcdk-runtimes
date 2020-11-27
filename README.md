@@ -120,12 +120,72 @@ runtime {
 
 It's also possible to specify an output directory (where your Lambda will be available) in the same block as `outputDir` parameter. By default, the `distributions` directory will be used.
 
+### Kotlin/Native Runtime
+
+You can also use Kotlin/Native to create AWS Lambda function.
+To do so, you need to create a [Multiplatform project](https://kotlinlang.org/docs/reference/mpp-intro.html) with `linuxX64()` target.
+`build.gradle.kts` will look something like this:
+```kotlin
+plugins {
+    kotlin("multiplatform") version "1.4.20"
+}
+
+repositories {
+    mavenCentral()
+}
+
+kotlin {
+    linuxX64()
+
+    sourceSets {
+        val commonMain by getting {}
+        val commonTest by getting {}
+    }
+}
+```
+Now, you need to add a `io.kcdk.native` plugin:
+```diff
+plugins {
+    kotlin("multiplatform") version "1.4.20"
++    id("io.kcdk.native") version "0.1.2"
+}
+```
+and Native runtime:
+```diff
+        val commonMain by getting {
++            dependencies {
++                implementation("com.kotlin.aws.runtime:runtime-native:0.1.2")
++            }
+        }
+```
+Then add a source file with a function that will handle requests. Note that we use `suspend` modifier. 
+It allows to call other asynchronous functions (e.g. make requests with [Ktor](https://ktor.io/docs/request.html#making-request)):
+```kotlin
+import com.kotlin.aws.native.runtime.objects.LambdaContext
+
+suspend fun friendlyHandler(context: LambdaContext, request: String): String =
+    "Hello, friend!!"
+```
+The only thing left is to add a `runtime` block to your `build.gradle.kts`:
+```diff
+runtime {
+    handler = "friendlyHandler"
+}
+```
+Now run either of two Gradle tasks:
+* `buildNativeDebugLambda` -- compiles faster, contains debug info, but slower machine code.
+* `buildNativeReleaseLambda` -- produces faster machine code, but longer compilation time.
+
+It will produce an archive in `build/distributions` directory that can be uploaded to AWS.
+
 ## Examples
 
 Any explanation becomes much better with a proper example.
 
 In the repository's [examples](https://github.com/AlexanderPrendota/kotlin-aws-lambda-custom-runtimes/tree/master/examples) folder, you can find example projects built with KCDK runtimes:
 
-+ [`aws-hello-world`](https://github.com/AlexanderPrendota/kotlin-aws-lambda-custom-runtimes/tree/master/examples/aws-hello-world) - simple example how to use KCDK runtimes for GraalVM.
-+ [`ktor-kotless-hello-world`](https://github.com/AlexanderPrendota/kotlin-aws-lambda-custom-runtimes/tree/master/examples/ktor-kotless-hello-world) - the example how to use [Kotless](https://github.com/JetBrains/kotless) framework with Ktor-DSL and build your project as native image with GraalVM. 
-+ [`hello-word-js-aws`](https://github.com/AlexanderPrendota/kcdk-runtimes/tree/master/examples/js) - simple example how to use KDCK runtime for JS.
++ [`aws-hello-world`](examples/aws-hello-world) - simple example how to use KCDK runtimes for GraalVM.
++ [`ktor-kotless-hello-world`](examples/ktor-kotless-hello-world) - the example how to use [Kotless](https://github.com/JetBrains/kotless) framework with Ktor-DSL and build your project as native image with GraalVM. 
++ [`hello-word-js-aws`](examples/js) - simple example how to use KDCK runtime for JS.
++ [`hello-native`](examples/hello-native) - trivial Native KCDK example.
++ [`spacex-launches`](examples/spacex-launches) - Native KCDK multiplatform sample.
