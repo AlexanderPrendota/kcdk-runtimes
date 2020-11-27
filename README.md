@@ -187,4 +187,5 @@ In the repository's [examples](https://github.com/AlexanderPrendota/kotlin-aws-l
 + [`aws-hello-world`](examples/aws-hello-world) - simple example how to use KCDK runtimes for GraalVM.
 + [`ktor-kotless-hello-world`](examples/ktor-kotless-hello-world) - the example how to use [Kotless](https://github.com/JetBrains/kotless) framework with Ktor-DSL and build your project as native image with GraalVM. 
 + [`hello-word-js-aws`](examples/js) - simple example how to use KDCK runtime for JS.
-+ [`hello-native`](examples/spacex-launches) - Kotlin/Native runtime sample.
++ [`hello-native`](examples/hello-native) - trivial Native KCDK example.
++ [`spacex-launches`](examples/spacex-launches) - Native KCDK multiplatform sample.
